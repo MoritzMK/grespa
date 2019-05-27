@@ -1,10 +1,11 @@
 name: grespa-webapp
 dependencies:
-  - python=2.7
-  - flask=0.10
+  - python=3.7
+  - flask
   - psycopg2
   - sqlalchemy
   - requests
+  - pip
   - pip:
     - flask_debugtoolbar
     - python-dotenv

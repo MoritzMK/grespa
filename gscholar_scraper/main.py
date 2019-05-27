@@ -25,5 +25,5 @@ if __name__ == '__main__':
         command += ' -o %s' % args.output_filetype
     if args.log_level:
         command += ' -L %s' % args.log_level
-    print 'executing: %s ' % command
+    print('executing: %s ' % command)
     cmdline.execute(command.split(' '))

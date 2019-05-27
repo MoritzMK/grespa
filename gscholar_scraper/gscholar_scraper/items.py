@@ -162,8 +162,8 @@ class OrgItem(GScholarItem):
         id = Column(String, primary_key=True)
         name = Column(String)
         addr = Column(String)
-        lng = Column(Float(Precision=64))
-        lat = Column(Float(Precision=64))
+        lng = Column(Float(precision=53))
+        lat = Column(Float(precision=53))
 
     id = scrapy.Field(output_processor=TakeFirst())
     name = scrapy.Field(output_processor=TakeFirst())
