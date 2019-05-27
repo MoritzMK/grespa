@@ -5,7 +5,7 @@
 # See documentation in:
 # http://doc.scrapy.org/en/latest/topics/items.html
 import re
-import urllib2
+import urllib.parse
 
 import scrapy
 from scrapy.item import Item, Field
@@ -49,7 +49,7 @@ def fix_string(input):
     :param input: input strings to clean
     :return: clean input strings in unicode
     """
-    return map(lambda s : urllib2.unquote(s.encode('ASCII')).decode('utf-8'), input)
+    return map(lambda s : urllib.parse.unquote(s.encode('ASCII')).decode('utf-8'), input)
 
 
 class FOSItem(GScholarItem):

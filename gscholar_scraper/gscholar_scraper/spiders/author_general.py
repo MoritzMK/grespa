@@ -1,7 +1,7 @@
 import random
 import re
-import urllib2
-import urlparse
+import urllib.parse
+
 
 from scrapy.http import Request
 from scrapy.loader import ItemLoader
@@ -55,7 +55,7 @@ class AuthorGeneral(DBConnectedSpider):
         try:
             start_label = session.query(FOSItem.Model).first().field_name
             self.logger.debug('starting with label %s ' % start_label)
-            enc = urllib2.quote(start_label.encode('utf-8')).encode('ASCII')
+            enc = urllib.parse.quote(start_label.encode('utf-8')).encode('ASCII')
             self.start_urls = [self.pattern.format(enc)]
         finally:
             session.close()
@@ -64,7 +64,7 @@ class AuthorGeneral(DBConnectedSpider):
         next_label = next(self.fields, None)
         if not next_label:
             return None
-        enc = urllib2.quote(next_label.field_name.encode('utf-8')).encode('ASCII')
+        enc = urllib.parse.quote(next_label.field_name.encode('utf-8')).encode('ASCII')
         self.logger.debug('Choosing existing label %s.' % enc)
         return self.pattern.format(enc)
 
@@ -91,7 +91,7 @@ class AuthorGeneral(DBConnectedSpider):
             # init database fields from saved state
                 self.fields = self.next_window()
 
-        search_fos =  urlparse.parse_qs(urlparse.urlparse(response.url).query)['mauthors'][0].split(':')[1]
+        search_fos =  urllib.parse.urlparse.parse_qs(urllib.parse.urlparse(response.url).query)['mauthors'][0].split(':')[1]
         self.logger.debug('Search fos: %s' % search_fos)
         # get 10 author divs
         for divs in response.xpath('//div[@class="gsc_1usr gs_scl"]')[0:9]:

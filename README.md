@@ -78,7 +78,7 @@ For an easier installation, the project uses [Anaconda](https://docs.continuum.i
 The basic software requirements are:
 
 - PostgreSQL > 9.4
-- Python 2.7
+- Python 3.7
 - *Optional:* Anaconda/Miniconda, conda-env
 
 If you are new to Anaconda, we recommend using [miniconda](http://conda.pydata.org/miniconda.html), for which the link provides installation instructions for Windows, OS X and Linux and a quick start guide.

@@ -1,5 +1,5 @@
 import re
-import urllib2
+import urllib.parse
 
 from scrapy.http import Request
 from scrapy.loader import ItemLoader
@@ -24,8 +24,8 @@ class OrgDetail(DBConnectedSpider):
         # select a field to start at
         if self.fields:
             start_org = utils.pop_random(self.fields)
-            print 'starting with org %s ' % start_org.name
-            enc = urllib2.quote(start_org.name.encode('utf-8')).encode('ASCII')
+            print('starting with org %s ' % start_org.name)
+            enc = urllib.parse.quote(start_org.name.encode('utf-8')).encode('ASCII')
             self.curr = start_org.id
             self.start_urls = [self.pattern.format(enc)]
 
@@ -42,7 +42,7 @@ class OrgDetail(DBConnectedSpider):
         next_label = utils.pop_random(self.fields)
         if not next_label:
             return None
-        enc = urllib2.quote(next_label.name.encode('utf-8')).encode('ASCII')
+        enc = urllib.parse.quote(next_label.name.encode('utf-8')).encode('ASCII')
         self.logger.debug('Choosing existing org %s.' % enc)
         self.curr= next_label.id
         return self.pattern.format(enc)
@@ -51,7 +51,7 @@ class OrgDetail(DBConnectedSpider):
 
     def parse(self, response):
         static =  response.xpath('/html/head/meta[@property="og:image"]/@content').extract_first()
-        print static
+        print(static)
         center = re.search('center=(.*?)&',static)
         coord = center.group(1).split('%2C')
 

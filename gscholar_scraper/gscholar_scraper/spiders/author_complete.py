@@ -1,6 +1,6 @@
 import random
 import re
-import urlparse
+from urllib.parse import urlparse
 
 import scrapy
 from scrapy.exceptions import NotSupported

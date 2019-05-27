@@ -1,5 +1,5 @@
 import re
-import urllib2
+import urllib.parse
 
 from scrapy.http import Request
 from scrapy.loader import ItemLoader
@@ -32,15 +32,15 @@ class AuthorCo(DBConnectedSpider):
         # select a field to start at
         if self.fields:
             start_author = self.fields.next().id
-            print 'starting with label %s ' % start_author
-            enc = urllib2.quote(start_author.encode('utf-8')).encode('ASCII')
+            print('starting with label %s ' % start_author)
+            enc = urllib.parse.quote(start_author.encode('utf-8')).encode('ASCII')
             self.start_urls = [self.pattern.format(enc)]
 
     def next_author_from_db(self):
         next_author = next(self.fields, None)
         if not next_author:
             return None
-        enc = urllib2.quote(next_author.id.encode('utf-8')).encode('ASCII')
+        enc = urllib.parse.quote(next_author.id.encode('utf-8')).encode('ASCII')
         self.logger.debug('Choosing existing author %s.' % enc)
         return self.pattern.format(enc)
 

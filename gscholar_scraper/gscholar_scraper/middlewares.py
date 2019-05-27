@@ -1,6 +1,8 @@
-import random, os, urllib2, time
-
-from urlparse import urlparse
+import random
+import os
+import time
+import urllib.request
+from urllib.parse import urlparse
 from scrapy.conf import settings
 from stem import Signal, SocketClosed
 from stem.control import Controller
@@ -26,13 +28,13 @@ class ProxyMiddleware(object):
 
 def make_request(url):
     def _set_urlproxy():
-        proxy_support = urllib2.ProxyHandler(
+        proxy_support = urllib.request.ProxyHandler(
             {'http' : urlparse(settings.get("HTTP_PROXY")).netloc})
-        opener = urllib2.build_opener(proxy_support)
-        urllib2.install_opener(opener)
+        opener = urllib.request.build_opener(proxy_support)
+        urllib.request.install_opener(opener)
     _set_urlproxy()
-    request = urllib2.Request(url, None, headers = {'User-Agent' : ua.random})
-    return urllib2.urlopen(request).read().rstrip()
+    request = urllib.request.Request(url, None, headers = {'User-Agent' : ua.random})
+    return urllib.request.urlopen(request).read().rstrip()
 
 
 def renew_connection(logger, settings):

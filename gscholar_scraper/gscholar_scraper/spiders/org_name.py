@@ -1,4 +1,4 @@
-import urllib2
+import urllib.parse
 
 from scrapy.http import Request
 from scrapy.loader import ItemLoader
@@ -23,8 +23,8 @@ class OrgName(DBConnectedSpider):
         # select a field to start at
         if self.fields:
             start_org = utils.pop_random(self.fields).org
-            print 'starting with org %s ' % start_org
-            enc = urllib2.quote(start_org.encode('utf-8')).encode('ASCII')
+            print('starting with org %s ' % start_org)
+            enc = urllib.parse.quote(start_org.encode('utf-8')).encode('ASCII')
             self.curr = enc
             self.start_urls = [self.pattern.format(enc)]
 
@@ -40,7 +40,7 @@ class OrgName(DBConnectedSpider):
         next_label = utils.pop_random(self.fields)
         if not next_label:
             return None
-        enc = urllib2.quote(next_label.org.encode('utf-8')).encode('ASCII')
+        enc = urllib.parse.quote(next_label.org.encode('utf-8')).encode('ASCII')
         self.logger.debug('Choosing existing org %s.' % enc)
         self.curr= enc
         return self.pattern.format(enc)

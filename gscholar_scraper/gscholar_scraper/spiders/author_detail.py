@@ -1,6 +1,6 @@
 import random
 import re
-import urlparse
+from urllib.parse import urlparse
 
 import scrapy
 from scrapy.exceptions import NotSupported
@@ -53,7 +53,7 @@ class AuthorDetails(DBConnectedSpider):
         # select a random url to start at
         if not self.start_urls and self.missing_authors:
             start_author = self.missing_authors.next()
-            print 'starting with author %s' % start_author.name
+            print('starting with author %s' % start_author.name)
             self.start_urls = [self.pattern.format(start_author.id)]
 
     def next_author_from_db(self):

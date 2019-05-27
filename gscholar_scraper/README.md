@@ -65,7 +65,7 @@ $ export $(cat ../*.env | xargs) && scrapyd &
 
 Now go to the `gscholar_scraper` directory and run:
 ```
-$ scrapy-deploy
+$ scrapyd-deploy
 ```
 This command deploys your scrapy project to the locally running scrapyd instance.
 
