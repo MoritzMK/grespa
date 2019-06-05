@@ -7,10 +7,10 @@ from scrapy.http import Request
 from scrapy.loader import ItemLoader
 from sqlalchemy.orm import sessionmaker
 
-import gscholar_scraper.utils as utils
-from gscholar_scraper.items import FOSItem, AuthorItem
-from gscholar_scraper.models import windowed_query
-from gscholar_scraper.spiders.base import DBConnectedSpider
+from .. import utils
+from ..items import FOSItem, AuthorItem
+from ..models import windowed_query
+from ..spiders.base import DBConnectedSpider
 
 
 class AuthorGeneral(DBConnectedSpider):

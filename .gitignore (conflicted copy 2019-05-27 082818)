@@ -73,3 +73,6 @@ gscholar_scraper/items/
 *.env.*
 # Work directory of the scrapyd service
 scrapyd-workdir/
+
+# Ignore vscode usersettings
+.vscode/*

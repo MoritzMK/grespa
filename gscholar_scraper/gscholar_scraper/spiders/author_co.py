@@ -4,9 +4,9 @@ import urllib.parse
 from scrapy.http import Request
 from scrapy.loader import ItemLoader
 
-from gscholar_scraper.items import AuthorItem, CoAuthorItem
-from gscholar_scraper.models import windowed_query
-from gscholar_scraper.spiders.base import DBConnectedSpider
+from ..items import AuthorItem, CoAuthorItem
+from ..models import windowed_query
+from ..spiders.base import DBConnectedSpider
 
 
 class AuthorCo(DBConnectedSpider):

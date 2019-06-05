@@ -3,7 +3,7 @@ from os import environ
 from sqlalchemy import create_engine
 from sqlalchemy.engine.url import URL
 
-from items import DeclarativeBase
+from .items import DeclarativeBase
 
 DB_HOST = 'DB_HOST'
 DB_PORT = 'DB_PORT'

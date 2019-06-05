@@ -2,7 +2,7 @@
 
 from scrapy.selector import Selector
 from scrapy.spiders import Spider
-from gscholar_scraper.items import Website
+from ..items import Website
 
 
 class DmozSpider(Spider):

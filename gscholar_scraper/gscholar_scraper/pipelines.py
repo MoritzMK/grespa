@@ -8,7 +8,7 @@
 from sqlalchemy import create_engine
 from sqlalchemy.engine.url import URL
 from sqlalchemy.orm import sessionmaker
-import database as db
+from . import database as db
 import logging
 
 logger = logging.getLogger('scrapy')

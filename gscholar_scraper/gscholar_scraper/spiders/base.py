@@ -4,7 +4,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.engine.url import URL
 from sqlalchemy.orm import sessionmaker
 
-from gscholar_scraper.database import db_settings
+from ..database import db_settings
 
 
 class DBConnectedSpider(scrapy.Spider):

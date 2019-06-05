@@ -1,23 +1,21 @@
 # -*- coding: utf-8 -*-
-from urlparse import urlparse, parse_qs, urljoin
+import urllib.parse
 
 from scrapy.http import Request
 from scrapy.loader import ItemLoader
 
-from gscholar_scraper.items import CategoryItem, SubCategoryItem
-from gscholar_scraper.spiders.base import DBConnectedSpider
+from ..items import CategoryItem, SubCategoryItem
+from .base import DBConnectedSpider
 
 
 class CategoriesSpider(DBConnectedSpider):
     # Configure the spider
     name = "categories"
     allowed_domains = ["scholar.google.com"]
-
-
-    pat = 'https://scholar.google.com/citations?view_op=top_venues&hl=de&vq={0}'
+ 
     # The main categories on Google Scholar
     cat_codes = ('bus','bio','chm', 'hum', 'med', 'eng', 'phy', 'soc')
-    start_urls = [pat.format(cat) for cat in cat_codes]
+    start_urls = ['https://scholar.google.com/citations?view_op=top_venues&hl=de&vq={0}'.format(cat) for cat in cat_codes]
 
     def parse(self, response):
         """ This function parses the categories and its subcategories on a gscholar web page.
@@ -39,9 +37,9 @@ class CategoriesSpider(DBConnectedSpider):
         for sub in response.xpath('//*[@id="gs_m_rbs"]/ul/li/a'):
             s = {'name' : sub.xpath('text()').extract_first()}
             rel_url = sub.xpath('@href').extract_first()
-            s['vq'] = parse_qs(urlparse(rel_url).query)[u'vq'][0]
+            s['vq'] = urllib.parse.parse_qs(urllib.parse(rel_url).query)[u'vq'][0]
             subs.append(s)
-            req = Request(urljoin(response.url,rel_url), callback=self.parse_item)
+            req = Request(urllib.parse.urljoin(response.url,rel_url), callback=self.parse_item)
             req.meta['parent'] = title
             yield req
         item.add_value('subs', subs)

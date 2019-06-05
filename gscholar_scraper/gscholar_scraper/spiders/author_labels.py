@@ -1,14 +1,14 @@
 import scrapy
 import re
-from gscholar_scraper.items import FOSItem
+from ..items import FOSItem
 from scrapy.http import Request
 from scrapy.loader import ItemLoader
-import gscholar_scraper.utils as utils
+from .. import utils
 from scrapy.utils.project import get_project_settings
 
-import urllib
+import urllib.parse
 
-from gscholar_scraper.spiders.base import DBConnectedSpider
+from ..spiders.base import DBConnectedSpider
 
 class AuthorLabels(DBConnectedSpider):
     name = "author_labels"
@@ -20,7 +20,7 @@ class AuthorLabels(DBConnectedSpider):
         super(self.__class__, self).__init__(*args, **kwargs)
         settings = get_project_settings()
         with open(settings['SEED_NAME_LIST'], mode='r') as f:
-            self.container = [(self.base_url + '={0}').format(urllib.quote(i)) for i in f.readlines() if len(i) > 0]
+            self.container = [(self.base_url + '={0}').format(urllib.parse.quote(i)) for i in f.readlines() if len(i) > 0]
 
         self.logger.info('Starting with %d surnames.', len(self.container))
 

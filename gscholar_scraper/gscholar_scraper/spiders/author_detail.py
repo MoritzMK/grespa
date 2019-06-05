@@ -8,10 +8,10 @@ from scrapy.http import Request
 from scrapy.loader import ItemLoader
 from sqlalchemy import or_
 
-import gscholar_scraper.utils as utils
-from gscholar_scraper.items import AuthorItem, DocItem, CoAuthorItem
-from gscholar_scraper.models import windowed_query
-from gscholar_scraper.spiders.base import DBConnectedSpider
+from .. import utils as utils
+from ..items import AuthorItem, DocItem, CoAuthorItem
+from ..models import windowed_query
+from ..spiders.base import DBConnectedSpider
 
 # TODO figure out how start_authors for post request to spider...
 

@@ -3,9 +3,9 @@ import urllib.parse
 from scrapy.http import Request
 from scrapy.loader import ItemLoader
 
-import gscholar_scraper.utils as utils
-from gscholar_scraper.items import AuthorItem, OrgItem
-from gscholar_scraper.spiders.base import DBConnectedSpider
+from .. import utils as utils
+from ..items import AuthorItem, OrgItem
+from ..spiders.base import DBConnectedSpider
 
 
 class OrgName(DBConnectedSpider):
