@@ -14,5 +14,5 @@ def getClosest(lat,lon,zoom, selected):
     q = 'SELECT CASE WHEN org1 IN ('+selected+') THEN org2 ELSE org1 END AS id FROM '
     q+= '(SELECT *, ST_Distance(ST_MakePoint('+str(lat)+','+str(lon)+'),path) AS dist FROM geodesicsfinal WHERE '
     q+= '(org1 IN (' + selected +') OR org2 IN (' + selected +'))) a  WHERE dist <'+str(maxDist) + ' ORDER BY dist ASC LIMIT 1';
-    print q
+    print(q)
     return q

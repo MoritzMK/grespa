@@ -7,7 +7,7 @@ from datatables import ColumnDT, DataTables
 from flask import Blueprint, render_template, redirect, url_for, request, Response
 from flask import Flask
 from flask import jsonify, abort
-from flask.ext.cache import Cache
+from flask_cache import Cache
 from flask_bootstrap import Bootstrap
 from flask_debug import Debug
 from flask_debugtoolbar import DebugToolbarExtension
@@ -18,15 +18,15 @@ from sqlalchemy.dialects import postgresql
 from sqlalchemy.ext.automap import automap_base
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.sql.expression import cast
-from urlparse import parse_qs, urlparse
+import urllib.parse
 import json
 import grequests
 
-import queries.co_network as co
-import queries.geo_m as geo_m
-import queries.geo_c as geo_c
-from queries.dashboard import avg_measures_sql,top_authors_m, time_series_documents, time_series_cited
-import queries.compare as cmp
+from .queries import co_network as co
+from .queries import geo_m as geo_m
+from .queries import geo_c as geo_c
+from .queries.dashboard import avg_measures_sql,top_authors_m, time_series_documents, time_series_cited
+from .queries import compare as cmp
 
 # dotenv_path = join(dirname(__file__), '.env')
 # load_dotenv(dotenv_path)
@@ -56,7 +56,7 @@ Label = Base.classes.labels
 toolbar = DebugToolbarExtension(app)
 
 # Enable SQLAlchemy in Debug Toolbar without flask-sqlalchemy :)
-from flask.ext.sqlalchemy import _EngineDebuggingSignalEvents
+from flask_sqlalchemy import _EngineDebuggingSignalEvents
 _EngineDebuggingSignalEvents(engine, app.import_name).register()
 
 session_factory = sessionmaker(bind=engine)
@@ -138,14 +138,14 @@ def extract_links(text):
     # \r\n
     # Split by newline, linefeeds will be stripped with other whitespace
     lines = (l for l in [line.strip() for line in text.split('\n')] if l)
-    users = (parse_qs(urlparse(line).query).get('user')[0] for line in lines)
+    users = (urllib.parse.parse_qs(urllib.parse(line).query).get('user')[0] for line in lines)
     return list(users)
 
 def request_for_author(author_id):
     'project=gscholar_scraper&spider=author_complete&start_authors={}'
     endpoint = 'http://{0}:{1}/schedule.json'.format(environ.get('SCRAPYD_HOST'), environ.get('SCRAPYD_PORT'))
     params = {'project': 'gscholar_scraper', 'spider' : 'author_complete', 'start_authors' : author_id}
-    print params
+    print(params)
     return grequests.post(endpoint, data=params)
 
 @app.route('/multisearch', methods=['POST', 'GET'])
@@ -186,7 +186,7 @@ def compare_authors():
     # redirect to a new/the same page and display the results
     author_ids = request.args.getlist('author_id')
     errors = []
-    print author_ids
+    print(author_ids)
     try:
         researchers = session.query(Author).filter(Author.id.in_(author_ids)).all()
         authors_cited_per_year_query = cmp.authors_cited_per_year(author_ids)
@@ -251,7 +251,7 @@ def search():
     if request.method == 'POST':
         search_term = request.form['entity_value']
         fos_search_term = field_term(search_term)
-        print 'Getting %s' % fos_search_term
+        print('Getting %s' % fos_search_term)
         try:
             authors = session.query(Author).filter(Author.name.like('%' + search_term + '%')).all()
             fields = session.query(Label).filter(Label.field_name.like('%' + fos_search_term + '%')).all()
@@ -313,8 +313,8 @@ def show_researcher_profile(id):
     try:
         res = session.query(Author).get(id)
         pub = session.query(Document).filter(Document.author_id == id).all()
-        print 'Num Publications: %d' % len(pub)
-        print 'Researcher: %s' % res.id if res else None
+        print('Num Publications: %d' % len(pub))
+        print('Researcher: %s' % res.id if res else None)
         if not res:
             abort(404)
     except Exception as e:
@@ -329,15 +329,15 @@ def compare_researcher_fos(id, field_name):
     errors = []
     results = {}
     try:
-        print field_name
+        print(field_name)
         res = session.query(Author).get(id)
-        print "Researcher %s" % res.name if res else None
+        print("Researcher %s" % res.name if res else None)
         avg = session.execute(avg_measures_sql([field_name])).fetchone()
-        print "Avg: %s " % avg
+        print("Avg: %s " % avg)
         return render_template('pages/compare.html', errors=errors, researcher=res, avg=avg, field_name=field_name)
     except Exception as e:
         errors.append(e)
-        print e
+        print(e)
     return render_template('pages/compare.html', errors=errors, field_name=field_name)
 
 
@@ -436,9 +436,9 @@ def getExtended():
         clicked = request.form['clicked']
 
         limit = request.form['limit']
-        print "all" + all
-        print "clicked" + clicked
-        print "limit" + limit
+        print("all" + all)
+        print("clicked" + clicked)
+        print("limit" + limit)
         ent = session.execute(co.getExtended(clicked, [all], limit))
         results  = [dict(row) for row in ent]
     except Exception as e:
@@ -470,7 +470,7 @@ def geo_m_getClosest():
         results = [dict(row) for row in d]
     except Exception as e:
         errors.append(e)
-    print errors
+    print(errors)
     return jsonify(results=results, errors=errors)
 
 # geoanalytics: coauthors
@@ -520,7 +520,7 @@ def geo_c_getClosest():
         results = [dict(row) for row in d]
     except Exception as e:
         errors.append(e)
-    print errors
+    print(errors)
     return jsonify(results=results, errors=errors)
 
 @app.route('/schedule', methods=['POST'])
