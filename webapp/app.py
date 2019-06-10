@@ -2,12 +2,14 @@ import time
 from datetime import datetime
 from os import environ
 
+import grequests
+
 import requests
 from datatables import ColumnDT, DataTables
 from flask import Blueprint, render_template, redirect, url_for, request, Response
 from flask import Flask
 from flask import jsonify, abort
-from flask_cache import Cache
+from flask_caching import Cache
 from flask_bootstrap import Bootstrap
 from flask_debug import Debug
 from flask_debugtoolbar import DebugToolbarExtension
@@ -20,13 +22,12 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy.sql.expression import cast
 import urllib.parse
 import json
-import grequests
 
-from .queries import co_network as co
-from .queries import geo_m as geo_m
-from .queries import geo_c as geo_c
-from .queries.dashboard import avg_measures_sql,top_authors_m, time_series_documents, time_series_cited
-from .queries import compare as cmp
+from queries import co_network as co
+from queries import geo_m as geo_m
+from queries import geo_c as geo_c
+from queries.dashboard import avg_measures_sql,top_authors_m, time_series_documents, time_series_cited
+from queries import compare as cmp
 
 # dotenv_path = join(dirname(__file__), '.env')
 # load_dotenv(dotenv_path)
