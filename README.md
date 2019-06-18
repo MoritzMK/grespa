@@ -80,6 +80,9 @@ The basic software requirements are:
 - PostgreSQL > 9.4
 - Python 2.7
 - *Optional:* Anaconda/Miniconda, conda-env
+- Due to a package incompatibility of scrapyd 1.2.0 , the package must be installed manually
+  - clone repository: https://github.com/scrapy/scrapyd
+  - pip install ./scrapyd/
 
 If you are new to Anaconda, we recommend using [miniconda](http://conda.pydata.org/miniconda.html), for which the link provides installation instructions for Windows, OS X and Linux and a quick start guide.
 

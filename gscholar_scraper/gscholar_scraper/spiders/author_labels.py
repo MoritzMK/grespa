@@ -31,8 +31,12 @@ class AuthorLabels(DBConnectedSpider):
 
     def parse(self, response):
         # for each author ID on the page,create a new authorItem
-        for ids in response.xpath('//*[@id="gsc_ccl"]/div/div/div[@class="gsc_1usr_int"]'):
+        # for ids in response.xpath('//*[@id="gsc_ccl"]/div/div/div[@class="gsc_1usr_int"]'):
+        self.logger.debug('parse called.')
+        self.logger.debug('Response: {}'.format(response.body))
+        for ids in response.xpath('//*[@id="gsc_sa_ccl"]/div/div/div/div[@class="gs_ai_int"]'):
             full = ids.extract()
+            self.logger.debug(full)
             fos = re.findall('=label:([^"]+)"', full)
             if fos:
                 for f in fos:

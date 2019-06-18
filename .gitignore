@@ -13,7 +13,7 @@ develop-eggs/
 
 downloads/
 eggs/
-.eggs/
+.eggs/HTTP
 lib/
 lib64/
 parts/
@@ -73,3 +73,5 @@ gscholar_scraper/items/
 *.env.*
 # Work directory of the scrapyd service
 scrapyd-workdir/
+.vscode/
+twistd.pid

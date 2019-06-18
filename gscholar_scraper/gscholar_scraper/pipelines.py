@@ -22,18 +22,16 @@ class PostgresStoragePipeline(object):
     @classmethod
     def from_crawler(cls, crawler):
         settings = db.db_settings(crawler.settings)
-        logger.error('Using database \'%s\' on host \'%s\'' % (settings.get('database'),
+        logger.info('Using database \'%s\' on host \'%s\'' % (settings.get('database'),
                                                                      settings.get('host')))
-        return cls(
-                settings
-            )
+        return cls(settings)
 
     def open_spider(self, spider):
         self.engine = create_engine(URL(**self.db_settings))
         # DeclarativeBase.metadata.create_all(self.engine)
 
         self.sessionmaker = sessionmaker(bind=self.engine)
-        spider.logger.error('Using database \'%s\' on host \'%s\'' % (self.db_settings.get('database'),
+        spider.logger.info('Using database \'%s\' on host \'%s\'' % (self.db_settings.get('database'),
                                                                      self.db_settings.get('host')))
         # spider.logger.info('Created sessionmaker for database %s' % self.db_settings.get('database'))
 

@@ -47,9 +47,10 @@ DOWNLOADER_MIDDLEWARES = {
     'scrapy.downloadermiddleware.retry.RetryMiddleware': None,
 
     'scrapy_fake_useragent.middleware.RandomUserAgentMiddleware': 400,
-    'gscholar_scraper.middlewares.ProxyMiddleware': None,
+    'gscholar_scraper.middlewares.ProxyMiddleware': 500,
+    'scrapy.downloadermiddlewares.redirect.RedirectMiddleware': None,
     # TODO fix own middleware that renews tor identity
-    'gscholar_scraper.middlewares.ProxiedTorConnectionMiddleware' : None,
+    'gscholar_scraper.middlewares.ProxiedTorConnectionMiddleware' : 800,
     'gscholar_scraper.middlewares.LoggerMiddleware' : 900,
 }
 
