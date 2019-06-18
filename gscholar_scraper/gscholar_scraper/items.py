@@ -45,13 +45,13 @@ class Website(Item):
 class GScholarItem(Item):
     pass
 
-
-def fix_string(input):
-    """ Fixes URL-encoded UTF-8 strings which are then again as UTF-8 in the html source
-    :param input: input strings to clean
-    :return: clean input strings in unicode
-    """
-    return map(lambda s : urllib.parse.unquote(s.encode('ASCII')).decode('utf-8'), input)
+# Obsolete in python 3. Strings are unicode by default.
+# def fix_string(input):
+#     """ Fixes URL-encoded UTF-8 strings which are then again as UTF-8 in the html source
+#     :param input: input strings to clean
+#     :return: clean input strings in unicode
+#     """
+#     return map(lambda s : urllib.parse.unquote(s.encode('ASCII')).decode('utf-8'), input)
 
 
 class FOSItem(GScholarItem):
@@ -61,7 +61,8 @@ class FOSItem(GScholarItem):
         __tablename__ = 'labels'
         field_name = Column(String, primary_key=True, index=True, unique=True)
 
-    field_name = scrapy.Field(input_processor=fix_string, output_processor=TakeFirst())
+    # field_name = scrapy.Field(input_processor=fix_string, output_processor=TakeFirst())
+    field_name = scrapy.Field(output_processor=TakeFirst())
 
 
 class CoAuthorItem(GScholarItem):
