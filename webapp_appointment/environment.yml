@@ -1,0 +1,16 @@
+dependencies:
+  - python=3.7
+  - flask
+  - psycopg2
+  - sqlalchemy
+  - requests
+  - pip:
+    - flask-debugtoolbar
+    - python-dotenv
+    - flask-bootstrap
+    - flask-sqlalchemy
+    - flask-nav
+    - flask-debug
+    - flask-caching
+    - flask-sqlalchemy-session
+    - sqlalchemy-datatables
