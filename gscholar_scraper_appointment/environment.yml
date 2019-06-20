@@ -1,0 +1,15 @@
+name: grespa-scraper
+dependencies:
+  - python=3.7
+  - psycopg2
+  - sqlalchemy
+  - requests
+  - psutil
+  - pip
+  - pip:
+    - scrapy
+    - python-dotenv
+    - stem
+    - scrapy-fake-useragent
+    - scrapyd-client
+

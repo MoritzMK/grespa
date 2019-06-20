@@ -104,7 +104,6 @@ class AuthorItem(GScholarItem):
     org = scrapy.Field(output_processor=TakeFirst())
     hasCo = scrapy.Field(output_processor=TakeFirst())
 
-
 class DocItem(GScholarItem):
 
     class Model(DeclarativeBase):
