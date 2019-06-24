@@ -1,5 +1,5 @@
 {
-    "python.pythonPath": "/home/moritz/miniconda3/envs/grespa-scraper/bin/python",
+    "python.pythonPath": "/home/moritz/miniconda3/envs/grespa-appointment/bin/python",
     "cSpell.words": [
         "Dmoz",
         "cmdline",
@@ -7,6 +7,7 @@
         "dont",
         "fostmp",
         "gscholar",
-        "postgresql"
+        "postgresql",
+        "werkzeug"
     ]
 }

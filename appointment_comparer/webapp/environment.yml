@@ -1,0 +1,11 @@
+dependencies:
+  - python=3.7
+  - flask 
+  - pip:
+    - grequests
+    - flask-debugtoolbar
+    - flask-bootstrap
+    - flask-nav
+    - flask-debug
+    - flask-caching
+    - python-dotenv

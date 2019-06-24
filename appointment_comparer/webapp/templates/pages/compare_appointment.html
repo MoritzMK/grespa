@@ -1,0 +1,65 @@
+<!-- extend base layout -->
+{% extends "base.html" %}
+
+{% block content %}
+
+{#    <div id="page-wrapper">#}
+    <div>
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h1 class="page-header">Compare authors
+                </div>
+                <!-- /.col-lg-12 -->
+            </div>
+            <!-- /.row -->
+        </div>
+        <!-- /.container-fluid -->
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-3">
+                    <div class="input-group">
+                        <input type="text" class="form-control" name='input-search' id='input-search' placeholder="" aria-label="" aria-describedby="basic-addon1">
+                        <div class="input-group-append">
+                            <button class="btn btn-success" type="button" id="btn-search">Suchen</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-3">
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="" aria-label="" aria-describedby="basic-addon1">
+                        <div class="input-group-append">
+                            <button class="btn btn-success" type="button">Suchen</button>
+                        </div>
+                    </div>
+                </div>
+            </div>    
+        </div>
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-3">
+                    
+                </div>
+                <div class="col-3">
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /#page-wrapper -->
+
+{% endblock %}
+
+{% block pagescript %}
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script type=text/javascript>
+        $(function() {
+            $('button#btn-search').bind('click', function() {
+                $.ajax({
+                    type: 'GET',
+                    url: '/author/'.concat($('#input-search').val())
+                });
+            });
+        });
+</script>
+{% endblock %}
