@@ -44,3 +44,6 @@ class DocItem(GScholarItem):
     published_in = scrapy.Field(output_processor = TakeFirst())
     year = scrapy.Field(output_processor = TakeFirst())
     cite_count = scrapy.Field(input_processor = MapCompose(lambda i : i.strip()),output_processor = TakeFirst())
+
+class VenueItem(GScholarItem):
+    title = scrapy.Field(output_processor = TakeFirst())
