@@ -1,0 +1,22 @@
+[
+    {
+        "Title": "Citation Pattern Matching Algorithms for Citation-based Plagiarism Detection: Greedy Citation Tiling, Citation Chunking and Longest Common Citation Sequence",
+        "Venue": "Proc. ACM Symposium on Document Engineering (DocEng)"
+    },
+    {
+        "Title": "State-of-the-art in Detecting Academic Plagiarism",
+        "Venue": "International Journal for Educational Integrity"
+    },
+    {
+        "Title": "Decentralized Trusted Timestamping using the Crypto Currency Bitcoin",
+        "Venue": "Proc. iConference"
+    },
+    {
+        "Title": "Comparative Evaluation of Text- and Citation-based Plagiarism Detection Approaches using GuttenPlag",
+        "Venue": "Proc. Int. ACM/IEEE Joint Conference on Digital Libraries (JCDL)"
+    },
+    {
+        "Title": "Semantification of Identifiers in Mathematics for better Math Information Retrieval",
+        "Venue": "Proc. Int. ACM SIGIR Conference on Research and Development in Information Retrieval (SIGIR)"
+    }
+]
