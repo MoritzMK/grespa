@@ -2,6 +2,7 @@ from gevent import monkey
 monkey.patch_all()
 
 from os import environ
+from sys import stdout
 
 from flask import Flask
 from flask_caching import Cache
@@ -16,28 +17,32 @@ from appointment_comparer.webapp.base import base
 from appointment_comparer.webapp.compareauthors import compareauthors
 from appointment_comparer.webapp.filter import friendly_time
 
+from twisted.logger import globalLogBeginner, textFileLogObserver
+from twisted.web import server, wsgi
+from twisted.internet import endpoints, reactor
 
-class ServerThread(threading.Thread):
+# class ServerThread(threading.Thread):
 
-    def __init__(self, app):
-        threading.Thread.__init__(self)
-        self.logger = app.logger
-        self.srv = make_server('127.0.0.1', 5000, app)
-        self.ctx = app.app_context()
-        self.ctx.push()#
+#     def __init__(self, app):
+#         threading.Thread.__init__(self)
+#         self.logger = app.logger
+#         self.srv = make_server('127.0.0.1', 5000, app)
+#         self.ctx = app.app_context()
+#         self.ctx.push()#
         
-    def run(self):
-        # self.logger.info('starting server')
-        self.srv.serve_forever()
+#     def run(self):
+#         # self.logger.info('starting server')
+#         self.srv.serve_forever()
 
-    def shutdown(self):
-        self.srv.shutdown()
+#     def shutdown(self):
+#         self.srv.shutdown()
 
 
-server = None
+# server = None
+
 
 def start_server():
-    global server
+    # global server
     app = Flask('Flask server')
     
     Bootstrap(app)
@@ -55,11 +60,25 @@ def start_server():
 
     toolbar = DebugToolbarExtension(app)
 
-    server = ServerThread(app)
-    server.start()
+    # server = ServerThread(app)
+    # server.start()
     # app.logger.info('server started')
 
-def stop_server():
-    global server
-    server.shutdown()
+    # start the logger
+    globalLogBeginner.beginLoggingTo([textFileLogObserver(stdout)])
 
+    # start the WSGI server
+    resource = wsgi.WSGIResource(reactor, reactor.getThreadPool(), app)
+    site = server.Site(resource)
+    http_server = endpoints.TCP4ServerEndpoint(reactor, 5000)
+    http_server.listen(site)
+
+    # start event loop
+    reactor.run()
+
+def stop_server():
+    # global server
+    # server.shutdown()
+    reactor.stop()
+
+    

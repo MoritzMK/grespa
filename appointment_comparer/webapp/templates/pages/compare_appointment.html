@@ -19,7 +19,7 @@
             <div class="row">
                 <div class="col-3">
                     <div class="input-group">
-                        <input type="text" class="form-control" name='input-search' id='input-search' placeholder="" aria-label="" aria-describedby="basic-addon1">
+                        <input type="text" class="form-control" name='input-search' id='input-search' placeholder="" aria-label="" aria-describedby="basic-addon1" value='No2ot2YAAAAJ'>
                         <div class="input-group-append">
                             <button class="btn btn-success" type="button" id="btn-search">Suchen</button>
                         </div>
@@ -53,12 +53,30 @@
 {% block pagescript %}
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 <script type=text/javascript>
-        $(function() {
-            $('button#btn-search').bind('click', function() {
-                $.ajax({
-                    type: 'GET',
-                    url: '/author/'.concat($('#input-search').val())
-                });
+        
+        function requestData(author_id) {
+            return $.ajax({
+                type: 'GET',
+                url: '/author/'.concat(author_id),
+                statusCode: {
+                    910: (response) => {
+                            setTimeout(requestData, 1000);
+                        },
+                    911: (response) => {
+                            setTimeout(requestData, 1000);
+                        },
+                    200: processData,
+                },
+            });
+        }
+
+        function processData(response) {
+            console.info(response);
+        }      
+
+        $(() => {
+            $('button#btn-search').bind('click', ()  => {
+                requestData($('#input-search').val());
             });
         });
 </script>
