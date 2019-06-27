@@ -1,10 +1,11 @@
 {
-    "python.pythonPath": "/home/moritz/miniconda3/envs/grespa-appointment/bin/python",
+    "python.pythonPath": "/home/moritz/miniconda3/envs/grespa-beautiful/bin/python",
     "cSpell.words": [
         "Dmoz",
         "cmdline",
         "divs",
         "dont",
+        "etree",
         "fostmp",
         "gscholar",
         "postgresql",
