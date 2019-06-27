@@ -11,8 +11,10 @@ import scrapy
 from scrapy.item import Item, Field
 from scrapy.loader.processors import TakeFirst, MapCompose
 
+
 class GScholarItem(Item):
     pass
+
 
 class AuthorItem(GScholarItem):
     # general author info, when searched with label:biology e.g.
@@ -37,13 +39,19 @@ class AuthorItem(GScholarItem):
     # authors image url
     image_url = scrapy.Field(output_processor=TakeFirst())
 
+
 class DocItem(GScholarItem):
-    title = scrapy.Field(output_processor = TakeFirst())
-    id = scrapy.Field(input_processor = MapCompose(lambda i: i.split(':')[-1]),output_processor = TakeFirst())
-    authors = scrapy.Field(input_processor = MapCompose(lambda s: s.split(',')))
-    published_in = scrapy.Field(output_processor = TakeFirst())
-    year = scrapy.Field(output_processor = TakeFirst())
-    cite_count = scrapy.Field(input_processor = MapCompose(lambda i : i.strip()),output_processor = TakeFirst())
+    title = scrapy.Field(output_processor=TakeFirst())
+    id = scrapy.Field(input_processor=MapCompose(
+        lambda i: i.split(':')[-1]), output_processor=TakeFirst())
+    authors = scrapy.Field(input_processor=MapCompose(lambda s: s.split(',')))
+    published_in = scrapy.Field(output_processor=TakeFirst())
+    year = scrapy.Field(output_processor=TakeFirst())
+    cite_count = scrapy.Field(input_processor=MapCompose(
+        lambda i: i.strip()), output_processor=TakeFirst())
+
 
 class VenueItem(GScholarItem):
-    title = scrapy.Field(output_processor = TakeFirst())
+    title = scrapy.Field(output_processor=TakeFirst())
+    acronym = scrapy.Field(output_processor=TakeFirst())
+    rank = scrapy.Field(output_processor=TakeFirst())
