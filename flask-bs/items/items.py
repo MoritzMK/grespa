@@ -15,12 +15,22 @@ class AuthorItem():
         self.image_url = image_url
         self.publications = publications
 
+
 class DocItem():
 
-    def __init__ (self, id=None, title=None, authors=None, venue=None, year=None, cite_count=None):
+    def __init__(self, id=None, title=None, authors=None, venue=None, year=None, cite_count=None):
         self.id = id
         self.title = title
         self.authors = authors
         self.venue = venue
         self.year = year
         self.cite_count = cite_count
+
+
+class VenueItem():
+
+    def __init__(self, id=None, venue=None, acronym=None, rank=None):
+        self.id = None
+        self.venue = None
+        self.acronym = None
+        self.rank = None
