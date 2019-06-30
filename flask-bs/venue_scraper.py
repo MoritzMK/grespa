@@ -1,6 +1,7 @@
 import urllib.request
 from lxml import html, etree
 from items.items import VenueItem
+import json
 
 SEARCH_PATTERN = 'http://portal.core.edu.au/conf-ranks/?search=&by=all&source=CORE2018&sort=arank&page='
 # 1 bis 33 also range(1,34)
@@ -23,23 +24,29 @@ def generateVenueItem():
     venue_item.venue = ""
 
 
-def generateVenueList(row, odd_row, venue_list):
-    while(venue_list.length() != 0):
+def generateVenueList(row, venue_list):
+    while(len(row) != 0):
         venue = {}
-        venue['title'] = even_row.pop(0)
-        venue['acronym'] = even_row.pop(0)
-        even_row.pop(0)
-        venue['rank'] = even_row.pop(0)
+        venue['title'] = row.pop(0)
+        venue['acronym'] = row.pop(0)
+        row.pop(0)
+        venue['rank'] = row.pop(0)
         # discard unused info
-        even_row.pop(0)
-        even_row.pop(0)
-        even_row.pop(0)
-        even_row.pop(0)
-        venue_list.add(venue)
+        row.pop(0)
+        row.pop(0)
+        row.pop(0)
+        row.pop(0)
+        venue_list.append(venue)
     return venue_list
 
 
 if __name__ == "__main__":
+
+    while i in range(1,34):
+        # html runterladen
+        # liste erweitern
+        pass
+    # liste in json umwandeln
 
     html = downloadPage()
 
@@ -90,5 +97,10 @@ if __name__ == "__main__":
     # print("DESCRIPTION: ", even_row)
     venue_list = []
     generateVenueList(even_row, venue_list)
+    generateVenueList(odd_row, venue_list)
+    # print(venue_list)
+    y = json.dumps(venue_list, indent=4)
+    with open("venues.json","w+") as file:
+        file.write(y)
 
     pass
