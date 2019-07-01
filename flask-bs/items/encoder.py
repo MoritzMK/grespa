@@ -11,8 +11,9 @@ class AuthorEncoder():
             # Iterate through all pubs and serialize them to a dict
             for pub in publications:
                 # if the doc has a venueItem, serialize this too
-                if (pub.venue):
-                    pub.venue = pub.venue.__dict__
+                # Uncomment if VenueItems will be introduced
+                # if (pub.venue):
+                #     pub.venue = pub.venue.__dict__
                 # Append the pub to the list
                 item.publications.append(pub.__dict__)
 
