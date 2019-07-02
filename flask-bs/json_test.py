@@ -15,37 +15,44 @@ if __name__ == "__main__":
     rank_dict = {}
     with open("venues.json", "r") as venues:
         venue_list = json.load(venues)
-        with open("papers.json", "r") as papers:
-            paper_list = json.load(papers)
+        with open("journals.json", "r") as journals:
+            journal_list = json.load(venues)
+            with open("papers.json", "r") as papers:
+                paper_list = json.load(papers)
+                for paper in paper_list:
+                    acronym = hasAcronym(paper['venue'])
+                    if acronym != None:
+                        # search for acronym
+                        for venue in venue_list:
+                            if venue['acronym'] == acronym:
+                                if venue['rank'] in rank_dict:
+                                    rank_dict[venue['rank']] += 1
+                                else:
+                                    rank_dict[venue['rank']] = 1
+                    else:
+                        # string match title
+                        print(
+                            "No acronym for ", paper["title"], ". Searching by given venue: ", paper['venue'])
+                        match = False
+                        for venue in venue_list:
+                            if paper['venue'] in venue['title']:
+                                if venue['rank'] in rank_dict:
+                                    rank_dict[venue['rank']] += 1
+                                    match = True
+                                else:
+                                    rank_dict[venue['rank']] = 1
+                                    match = True
+                        if match == False:
+                            print(
+                                "No match found for ", paper["title"], "in conferences. Searching in journals")
+                            for journal in journal_list:
+                                if paper['venue'] in journal['title']:
+                                    if journal['rank'] in rank_dict:
+                                        rank_dict[journal['rank']] += 1
+                                        match = True
+                                    else:
+                                        rank_dict[journal['rank']] = 1
+                                        match = True
 
-            # for key in first_venue:
-            #     print(key)
-            # for val in first_venue:
-            #     print(first_venue[val])
-
-            for paper in paper_list:
-                acronym = hasAcronym(paper['Venue'])
-                if acronym != None:
-                    # search for acronym
-                    for venue in venue_list:
-                        if venue['Acronym'] == acronym:
-                            if venue['Rank'] in rank_dict:
-                                rank_dict[venue['Rank']] += 1
-                            else:
-                                rank_dict[venue['Rank']] = 1
-                else:
-                    # string match title and pray
-                    print("No acronym for ", paper["Title"], ". Searching by given venue: ", paper['Venue'])
-                    match = False
-                    for venue in venue_list:
-                        if venue['Title'] == paper['Venue']:
-                            if venue['Rank'] in rank_dict:
-                                rank_dict[venue['Rank']] += 1
-                                match = True
-                            else:
-                                rank_dict[venue['Rank']] = 1
-                                match = True
-                    if match==False:
-                        print("No match found for ", paper["Title"],".")
     print(rank_dict)
     pass
