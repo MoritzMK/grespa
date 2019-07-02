@@ -8,7 +8,9 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
-    <title>Hello, world!</title>
+    <link rel=stylesheet type=text/css href="{{ url_for('static', filename='style.css') }}" />
+
+    <title>Grespa</title>
   </head>
   <body>
     <!-- Optional JavaScript -->
@@ -16,11 +18,13 @@
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <!-- Some charts -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0/dist/Chart.min.js"></script>
     
     <div class="container-fluid">
         <div class="row">
             <div class="col-lg-12">
-                <h1 class="page-header">Compare authors
+                <h1 class="page-header">Compare authors</h1>
             </div>
             <!-- /.col-lg-12 -->
         </div>
@@ -28,19 +32,46 @@
     </div>
     <div class="container-fluid">
         <div class="row">
-            <div class="col-3">
-                <div class="input-group">
-                    <input type="text" class="form-control" name='input-search' id='input-search' placeholder="" aria-label="" aria-describedby="basic-addon1" value='No2ot2YAAAAJ'>
-                    <div class="input-group-append">
-                        <button class="btn btn-success" type="button" id="btn-search">Suchen</button>
+            <div class="col-lg-6 px-lg-4">
+                <div class="row">
+                    <h2>Author 2</h2>
+                </div>
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="input-group">
+                            <input type="text" class="form-control" name='input-search' id='input-search-left' placeholder="" aria-label="" aria-describedby="basic-addon1" value='No2ot2YAAAAJ'>
+                            <div class="input-group-append">
+                            <button class="btn btn-success" type="button" id="btn-search-left">Suchen</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xl">
+                        <canvas class='chart' id='chart-cpy-left'></canvas>
+                    </div>
+                    <div class="col-xl">
+                        <canvas class='chart' id='chart-cpy-left'></canvas>
                     </div>
                 </div>
             </div>
-            <div class="col-3">
-                <div class="input-group">
-                    <input type="text" class="form-control" placeholder="" aria-label="" aria-describedby="basic-addon1">
-                    <div class="input-group-append">
-                        <button class="btn btn-success" type="button">Suchen</button>
+            <div class="col-lg-6 px-lg-4">
+                <div class="row">
+                    <h2>Author 2</h2>
+                </div>
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="input-group">
+                            <input type="text" class="form-control" name='input-search' id='input-search-right' placeholder="" aria-label="" aria-describedby="basic-addon1" value='No2ot2YAAAAJ'>
+                            <div class="input-group-append">
+                            <button class="btn btn-success" type="button" id="btn-search-right">Suchen</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-6">
+                        <canvas class='chart' id='chart-cpy-right'></canvas>
                     </div>
                 </div>
             </div>
@@ -51,31 +82,4 @@
 
 
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-<script type=text/javascript>
-        
-        function requestData(author_id) {
-            return $.ajax({
-                type: 'GET',
-                url: '/author/'.concat(author_id),
-                statusCode: {
-                    910: (response) => {
-                            setTimeout(requestData, 1000);
-                        },
-                    911: (response) => {
-                            setTimeout(requestData, 1000);
-                        },
-                    200: processData,
-                },
-            });
-        }
-
-        function processData(response) {
-            console.info(response);
-        }      
-
-        $(() => {
-            $('button#btn-search').bind('click', ()  => {
-                requestData($('#input-search').val());
-            });
-        });
-</script>
+<script type=text/javascript src="static/script.js"></script>
