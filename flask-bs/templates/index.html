@@ -5,81 +5,206 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <!-- Bootstrap CSS -->
+    <title>Grespa</title>
+
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ url_for('static', filename='img/apple-touch-icon.png') }}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('static', filename='img/favicon-32x32.png') }}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ url_for('static', filename='img/favicon-16x16.png') }}">
+    <link rel="manifest" href="{{ url_for('static', filename='site.webmanifest') }}">
+
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
-    <link rel=stylesheet type=text/css href="{{ url_for('static', filename='style.css') }}" />
+    <link rel=stylesheet type=text/css href="{{ url_for('static', filename='css/sb-admin-2.css') }}" />
+    <link rel=stylesheet type=text/css href="{{ url_for('static', filename='css/style.css') }}" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.9.0/css/all.min.css" integrity="sha256-UzFD2WYH2U1dQpKDjjZK72VtPeWP50NoJjd26rnAdUI=" crossorigin="anonymous" />
 
-    <title>Grespa</title>
+
+
   </head>
   <body>
-    <!-- Optional JavaScript -->
-    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <div class="container-fluid">
+      <!-- Page Heading -->
+      <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800">Grespa - Compare Authors</h1>
+        <!-- <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i class="fas fa-download fa-sm text-white-50"></i> Generate Report</a> -->
+      </div>
+
+      <!-- Main row -->
+      <div class="row">
+
+        <!-- Left side -->
+        <div class="col-xl-6 col-lg-12 p-4 " id="col-left">
+          <div class="card shadow mx-4">
+            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+              <h6 class="m-0 font-weight-bold text-primary">Author 1</h6>
+            </div>
+            <div class="card-body">
+              <form class="form-inline">
+                <div class="input-group mb-2 mr-sm-2">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text" id="basic-addon1">UserId</span>
+                  </div>
+                  <input type="text" class="form-control" placeholder="" value='No2ot2YAAAAJ' id='input-userid-left'>
+                </div>
+                <div class="input-group mb-2 mr-sm-2">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text" id="basic-addon1">Doctorate Year</span>
+                  </div>
+                  <input type="text" class="form-control" placeholder="" value='2015' id='input-docyear-left'>
+                </div>
+                <button class="btn btn-primary mb-2 mr-sm-2" type="button" id="btn-search-left">
+                  <i class="fas fa-search fa-sm"></i>
+                  Search
+                </button>
+              </form>
+            </div>
+          </div>
+          <div class="card-hide card shadow mx-4">
+            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+              <h6 class="m-0 font-weight-bold text-primary">Author General</h6>
+            </div>
+            <div class="card-body">
+              <div class="row">
+                <div class="col-4">
+                  <div class='square circle'>
+                    <img class='avatar square-content' id='avatar-left'/>
+                  </div>
+                </div>
+                <div class="col-8">
+                  <h5 id="lbl-name-left"></h5>
+                  <label id="lbl-description-left"></label>
+                  <label id="lbl-fos-left"></label>
+                  <label id="lbl-name-left"></label>
+                </div>
+              </div>
+              
+            </div>
+          </div>
+          <div class="card shadow mx-4 card-hide">
+            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+              <h6 class="m-0 font-weight-bold text-primary">Some values</h6>
+            </div>
+            <div class="card-body">
+              <div class="row">
+                <div class="col">
+                  <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Cited</div>
+                  <div class="h5 mb-0 font-weight-bold text-gray-800" id="lbl-cited-left"></div>
+                </div>
+                <div class="col">
+                  <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">h-index</div>
+                  <div class="h5 mb-0 font-weight-bold text-gray-800" id="lbl-hindex-left"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="card shadow mx-4 card-hide">
+              <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                <h6 class="m-0 font-weight-bold text-primary">Cited</h6>
+              </div>
+              <div class="card-body">
+                <div class="chart-area">
+                  <canvas id="chart-citecount-left"></canvas>
+                </div>
+              </div>
+            </div>
+          <div class="card shadow mx-4 card-hide">
+            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+              <h6 class="m-0 font-weight-bold text-primary">Cites per year</h6>
+            </div>
+            <div class="card-body">
+              <div class="chart-area">
+                <canvas id="chart-cpy-left"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right side -->
+        <div class="col-xl-6 col-lg-12 p-4" id="col-right">
+          <div class="card shadow mx-4">
+            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+              <h6 class="m-0 font-weight-bold text-primary">Author 2</h6>
+            </div>
+            <div class="card-body">
+              <form class="form-inline">
+                <div class="input-group mb-2 mr-sm-2">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text" id="basic-addon1">UserId</span>
+                  </div>
+                  <input type="text" class="form-control" placeholder="" value='No2ot2YAAAAJ' id='input-userid-right'>
+                </div>
+                <div class="input-group mb-2 mr-sm-2">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text" id="basic-addon1">Doctorate Year</span>
+                  </div>
+                  <input type="text" class="form-control" placeholder="" value='2013' id='input-docyear-right'>
+                </div>
+                <button class="btn btn-primary mb-2 mr-sm-2" type="button" id="btn-search-right">
+                  <i class="fas fa-search fa-sm"></i>
+                  Search
+                </button>
+              </form>
+            </div>
+          </div>
+          <div class="card-hide card shadow mx-4">
+            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+              <h6 class="m-0 font-weight-bold text-primary">Author General</h6>
+            </div>
+            <div class="card-body">
+              <div class="row">
+                <div class="col-4">
+                  <div class='square circle'>
+                    <img class='avatar square-content' id='avatar-right'/>
+                  </div>
+                </div>
+                <div class="col-8">
+                  <h5 id="lbl-name-right"></h5>
+                  <label id="lbl-description-right"></label>
+                  <label id="lbl-fos-right"></label>
+                  <label id="lbl-name-right"></label>
+                </div>
+              </div>
+              
+            </div>
+          </div>
+          <div class="card shadow mx-4 card-hide">
+              <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                <h6 class="m-0 font-weight-bold text-primary">Cited</h6>
+              </div>
+              <div class="card-body">
+                <div class="chart-area">
+                  <canvas id="chart-citecount-right"></canvas>
+                </div>
+              </div>
+            </div>
+          <div class="card shadow mx-4 card-hide">
+            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+              <h6 class="m-0 font-weight-bold text-primary">Cites per year</h6>
+            </div>
+            <div class="card-body">
+              <div class="chart-area">
+                <canvas id="chart-cpy-right"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+
+
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-    <!-- Some charts -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0/dist/Chart.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.9.0/js/all.min.js" integrity="sha256-xzrHBImM2jn9oDLORlHS1/0ekn1VyypEkV1ALvUx8lU=" crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script type=text/javascript src="static/script.js"></script>
     
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-lg-12">
-                <h1 class="page-header">Compare authors</h1>
-            </div>
-            <!-- /.col-lg-12 -->
-        </div>
-        <!-- /.row -->
-    </div>
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-lg-6 px-lg-4">
-                <div class="row">
-                    <h2>Author 2</h2>
-                </div>
-                <div class="row">
-                    <div class="col-lg-6">
-                        <div class="input-group">
-                            <input type="text" class="form-control" name='input-search' id='input-search-left' placeholder="" aria-label="" aria-describedby="basic-addon1" value='No2ot2YAAAAJ'>
-                            <div class="input-group-append">
-                            <button class="btn btn-success" type="button" id="btn-search-left">Suchen</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-xl">
-                        <canvas class='chart' id='chart-cpy-left'></canvas>
-                    </div>
-                    <div class="col-xl">
-                        <canvas class='chart' id='chart-cpy-left'></canvas>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-6 px-lg-4">
-                <div class="row">
-                    <h2>Author 2</h2>
-                </div>
-                <div class="row">
-                    <div class="col-lg-6">
-                        <div class="input-group">
-                            <input type="text" class="form-control" name='input-search' id='input-search-right' placeholder="" aria-label="" aria-describedby="basic-addon1" value='No2ot2YAAAAJ'>
-                            <div class="input-group-append">
-                            <button class="btn btn-success" type="button" id="btn-search-right">Suchen</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-lg-6">
-                        <canvas class='chart' id='chart-cpy-right'></canvas>
-                    </div>
-                </div>
-            </div>
-        </div>    
-    </div>
+
   </body>
 </html>
 
 
-<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-<script type=text/javascript src="static/script.js"></script>
+
