@@ -7,7 +7,7 @@ class BeautifulScraper():
 
     SCRAPED_AUTHORS_PATH = './scraped_data/authors/{}.json'
     SCRAPED_PAGES_PATH = './scraped_data/pages/{}.html'
-    SEARCH_PATTERN = 'https://scholar.google.de/citations?hl=de&user={0}&cstart=0&pagesize={1}'
+    SEARCH_PATTERN = 'https://scholar.google.de/citations?hl=de&user={0}&cstart={1}&pagesize={2}'
     SCHOLAR_BASE_PATH = 'https://scholar.google.de'
     PAGESIZE = 100
 
@@ -15,7 +15,8 @@ class BeautifulScraper():
         self.init_log()
 
     def downloadProfilePage(self, author_id, start=0):
-        url = BeautifulScraper.SEARCH_PATTERN.format(author_id, start)
+        url = BeautifulScraper.SEARCH_PATTERN.format(author_id, start, BeautifulScraper.PAGESIZE)
+        logging.debug('Scrape url: {}'.format(url))
         with urllib.request.urlopen(url) as response:
             html = response.read()
             return html
@@ -66,18 +67,19 @@ class BeautifulScraper():
         # Publication items for the author
         num_pubs = 0
         docs = dom.xpath('//tr[@class="gsc_a_tr"]')
-        logging.debug('Found {} tags with class gsc_a_tr'.format(len(docs)))
+        logging.debug('Found {} tags with class gsc_a_tr.'.format(len(docs)))
         for doc in docs:
             num_pubs += 1
             doc_item = DocItem()
-            doc_item.title = dom.xpath('./td[@class="gsc_a_t"]/a/text()')
-            doc_item.id = dom.xpath('./td[@class="gsc_a_t"]/a/@href')
-            doc_item.authors = dom.xpath('./td[@class="gsc_a_t"]/div/text()[1]')
-            doc_item.venue = dom.xpath('./td[@class="gsc_a_t"]/div/text()[2]')
-            doc_item.cite_count = dom.xpath('./td[@class="gsc_a_c"]/a/text()')
-            doc_item.year = dom.xpath('./td[@class="gsc_a_y"]//text()')
+            doc_item.title = doc.xpath('//td[@class="gsc_a_t"]/a/text()')[0]
+            doc_item.id = doc.xpath('//td[@class="gsc_a_t"]/a/@href')[0]
+            doc_item.authors = doc.xpath('//td[@class="gsc_a_t"]/div[1]/text()')[0]
+            doc_item.venue = doc.xpath('//td[@class="gsc_a_t"]/div[2]/text()')[0]
+            cite_count = doc.xpath('//td[@class="gsc_a_c"]/a/text()')
+            doc_item.cite_count = cite_count[0] if len(cite_count) > 0 else 0
+            doc_item.year = doc.xpath('//td[@class="gsc_a_y"]//text()')[0]
             publications.append(doc_item)
-        logging.info('Scraped {} documents'.format(num_pubs))
+        logging.info('Scraped {} publications.'.format(num_pubs))
 
         return (num_pubs, publications)
 
@@ -90,12 +92,13 @@ class BeautifulScraper():
         start = 0
         while pub_count == BeautifulScraper.PAGESIZE:
             if start > 0:
-                self.logger.info('Start another request with newURL')
-                start = start + BeautifulScraper.PAGESIZE
+                logging.info('Start another request with newURL')
                 html = self.downloadProfilePage(author_id, start)
 
             (pub_count, publications) = self.parsePublications(html)
             author_item.publications.extend(publications)
+            start = start + BeautifulScraper.PAGESIZE
+
 
         return author_item
 
