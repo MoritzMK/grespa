@@ -37,7 +37,7 @@ def generateVenueList(row, venue_list):
         venue = {}
         venue['title'] = row.pop(0)
         venue['acronym'] = row.pop(0)
-        row.pop(0)
+        venue['source'] = row.pop(0)
         venue['rank'] = row.pop(0)
         # discard unused info
         row.pop(0)
@@ -71,9 +71,9 @@ def fileExists(file):
         return False
 
 
-def writeJson(venue_list):
-    y = json.dumps(venue_list, indent=4)
-    with open("venues.json", "w+") as file:
+def writeJson(my_list, target):
+    y = json.dumps(my_list, indent=4)
+    with open(target, "w+") as file:
         file.write(y)
 
 
@@ -81,61 +81,68 @@ def scrapeVenues():  # eigentlich conferences
     print("Scraping Venues")
     # nur falls file nicht vorhanden
     if fileExists("venues.json") == False:
-        venue_list = []
-        for i in range(1, 19):
-            # html runterladen
-            html = downloadPageVenue(i)
+        try:
+            venue_list = []
+            for i in range(1, 44):
+                # html runterladen
+                html = downloadPageVenue(i)
 
-            dom = etree.HTML(html)
-            even_row = dom.xpath('//tr[@class="evenrow"]/td/text()')
-            odd_row = dom.xpath('//tr[@class="evenrow"]/td/text()')
-            j = 0
-            for element in even_row:
-                even_row[j] = element.lstrip('\n ').rstrip()
-                j += 1
+                dom = etree.HTML(html)
+                even_row = dom.xpath('//tr[@class="evenrow"]/td/text()')
+                odd_row = dom.xpath('//tr[@class="oddrow"]/td/text()')
+                j = 0
+                for element in even_row:
+                    even_row[j] = element.lstrip('\n ').rstrip()
+                    j += 1
 
-            j = 0
-            for element in odd_row:
-                odd_row[j] = element.lstrip('\n ').rstrip()
-                j += 1
+                j = 0
+                for element in odd_row:
+                    odd_row[j] = element.lstrip('\n ').rstrip()
+                    j += 1
 
-            # liste erweitern
-            generateVenueList(even_row, venue_list)
-            generateVenueList(odd_row, venue_list)
+                # liste erweitern
+                generateVenueList(even_row, venue_list)
+                generateVenueList(odd_row, venue_list)
 
-        # liste in json umwandeln
-        writeJson(venue_list)
-        print("Done")
-
+            # liste in json umwandeln
+            writeJson(venue_list,"venues.json")
+            print("Done")
+        except urllib.error.HTTPError as error:
+            print("Error while scraping: ", error)
+        
 
 def scrapeJournals():
     print("Scraping Journals")
     if fileExists("journals.json") == False:
-        journal_list = []
-        for i in range(1, 44):
-            # html runterladen
-            html = downloadPageJournal(i)
+        try:
+            journal_list = []
+            for i in range(1, 19):
+                # html runterladen
+                html = downloadPageJournal(i)
 
-            dom = etree.HTML(html)
-            even_row = dom.xpath('//tr[@class="evenrow"]/td/text()')
-            odd_row = dom.xpath('//tr[@class="evenrow"]/td/text()')
-            j = 0
-            for element in even_row:
-                even_row[j] = element.lstrip('\n ').rstrip()
-                j += 1
+                dom = etree.HTML(html)
+                even_row = dom.xpath('//tr[@class="evenrow"]/td/text()')
+                odd_row = dom.xpath('//tr[@class="oddrow"]/td/text()')
+                j = 0
+                for element in even_row:
+                    even_row[j] = element.lstrip('\n ').rstrip()
+                    j += 1
 
-            j = 0
-            for element in odd_row:
-                odd_row[j] = element.lstrip('\n ').rstrip()
-                j += 1
+                j = 0
+                for element in odd_row:
+                    odd_row[j] = element.lstrip('\n ').rstrip()
+                    j += 1
 
-            # liste erweitern
-            generateJournalList(even_row, journal_list)
-            generateJournalList(odd_row, journal_list)
+                # liste erweitern
+                generateJournalList(even_row, journal_list)
+                generateJournalList(odd_row, journal_list)
 
-        # liste in json umwandeln
-        writeJson(journal_list)
-    print("Done")
+            # liste in json umwandeln
+            writeJson(journal_list,"journals.json")
+            print("Done")
+        except urllib.error.HTTPError as error:
+            print("Error while scraping: ", error)
+        
 
 
 if __name__ == "__main__":
