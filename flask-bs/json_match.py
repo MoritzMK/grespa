@@ -1,5 +1,6 @@
 import json
 import re
+from fuzzywuzzy import fuzz
 
 
 def hasAcronym(title):
@@ -16,7 +17,7 @@ if __name__ == "__main__":
     with open("venues.json", "r") as venues:
         venue_list = json.load(venues)
         with open("journals.json", "r") as journals:
-            journal_list = json.load(venues)
+            journal_list = json.load(journals)
             with open("papers.json", "r") as papers:
                 paper_list = json.load(papers)
                 for paper in paper_list:
@@ -25,6 +26,7 @@ if __name__ == "__main__":
                         # search for acronym
                         for venue in venue_list:
                             if venue['acronym'] == acronym:
+                                print('acronym match')
                                 if venue['rank'] in rank_dict:
                                     rank_dict[venue['rank']] += 1
                                 else:
@@ -34,8 +36,11 @@ if __name__ == "__main__":
                         print(
                             "No acronym for ", paper["title"], ". Searching by given venue: ", paper['venue'])
                         match = False
+                        substring = paper['venue']
+                        substring = substring[:-1]
+                        print("Substring: ",substring)
                         for venue in venue_list:
-                            if paper['venue'] in venue['title']:
+                            if paper['venue'] == venue['title']:
                                 if venue['rank'] in rank_dict:
                                     rank_dict[venue['rank']] += 1
                                     match = True
@@ -43,6 +48,7 @@ if __name__ == "__main__":
                                     rank_dict[venue['rank']] = 1
                                     match = True
                         if match == False:
+                            # search in journals
                             print(
                                 "No match found for ", paper["title"], "in conferences. Searching in journals")
                             for journal in journal_list:
@@ -53,6 +59,8 @@ if __name__ == "__main__":
                                     else:
                                         rank_dict[journal['rank']] = 1
                                         match = True
+                            if match == False:
+                                print("No match found")
 
     print(rank_dict)
     pass
