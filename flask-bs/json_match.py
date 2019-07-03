@@ -36,9 +36,9 @@ if __name__ == "__main__":
                         print(
                             "No acronym for ", paper["title"], ". Searching by given venue: ", paper['venue'])
                         match = False
-                        substring = paper['venue']
-                        substring = substring[:-1]
-                        print("Substring: ",substring)
+                        # substring = paper['venue']
+                        # substring = substring[:-1]
+                        # print("Substring: ", substring)
                         for venue in venue_list:
                             if paper['venue'] == venue['title']:
                                 if venue['rank'] in rank_dict:
