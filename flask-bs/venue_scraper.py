@@ -8,7 +8,6 @@ from pathlib import Path
 class VenueScraper():
 
     SEARCH_PATTERN_VENUE = 'http://portal.core.edu.au/conf-ranks/?search=&by=all&source=all&sort=atitle&page='
-    # 1 bis 33 also range(1,44)
     SEARCH_PATTERN_JOURNAL = 'http://portal.core.edu.au/jnl-ranks/?search=&by=all&source=ERA2010%0D%0A&sort=atitle&page='
 
     def downloadPageVenue(self, number):
