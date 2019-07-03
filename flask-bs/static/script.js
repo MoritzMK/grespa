@@ -1,6 +1,7 @@
 var charts = {}
 
-function requestData(author_id, doc_year, side) {
+// Requests
+function requestAuthorData(author_id, doc_year, side) {
     return $.ajax({
         type: 'GET',
         url: '/author/'.concat(author_id),
@@ -9,11 +10,20 @@ function requestData(author_id, doc_year, side) {
     });
 }
 
+function requestSearchData(search_string) {
+    return $.ajax({
+        type: 'GET',
+        url: '/author/search/'.concat(search_string),
+        success: (response) => {processSearchResult(response)} 
+    });
+}
+
+// Data Processing
 function processData(response, side) {
-    console.info('Got response for side: '.concat(side))
+    console.info('Got response for side: '.concat(side));
     console.info(response);
 
-    clearSide(side);
+    // clearSide(side);
 
     createCvyChart(response.data, side);
     createCiteCountChart(response.data, side)
@@ -22,22 +32,23 @@ function processData(response, side) {
 
     setMetrics(response.data, side);
 
-
     setCardsDisplay(side, false);
 }
 
-function getSide(id) {
-    var dummy = id.split('-');
-    var side = dummy[dummy.length - 1].trim();
-    return side;
+function processSearchResult(response) {
+    console.info('Got response for search.');
+    console.info(response);
+
+    // clearSearchResults();
+
+    for (author of response.data) {
+        addSearchResult(author);
+    }
 }
 
-function saveChart(chart, name, side) {
-    if (!(side in charts)) {
-        charts[side] = {};
-    }
-
-    charts[side][name] = chart;
+// Clearing
+function clearSearchResults() {
+    $('#search-result-group').empty();
 }
 
 function clearSide(side) {
@@ -47,22 +58,20 @@ function clearSide(side) {
         }
     }
 
-    // document.getElementById('avatar-'.concat(side)).style.display = 'none';
-
     setCardsDisplay(side, true);
 }
 
-function setCardsDisplay(side, hide) {
-    var cards = document.getElementById('col-'.concat(side)).getElementsByClassName('card-hide');
+// Add data to view
+function addSearchResult(author){
+    var template = $('#search-result-template').html();
 
-    for (card of cards) {
-        if(hide){
-            card.style.display = 'none';
-        }
-        else{
-            card.style.display = 'flex';
-        }
-    }
+    template = template.replace('%image%', author.image_url);
+    template = template.replace('%name%', author.name);
+    template = template.replace('%org%', author.organization);
+    template = template.replace('%desc%', author.description);
+    template = template.replace('%id%', author.id);
+
+    $('#search-result-group').append(template);
 }
 
 function createCvyChart(data, side) {
@@ -179,15 +188,75 @@ function setMetrics(data, side) {
 
 }
 
-$(() => {
-    $('button').click(function(event) {
-        // this.append wouldn't work
-        // $(this).append(' Clicked');
-        
+
+// Some other stuff
+function getSide(id) {
+    var dummy = id.split('-');
+    var side = dummy[dummy.length - 1].trim();
+    return side;
+}
+
+function saveChart(chart, name, side) {
+    if (!(side in charts)) {
+        charts[side] = {};
+    }
+
+    charts[side][name] = chart;
+}
+
+function setCardsDisplay(side, hide) {
+    var cards = document.getElementById('col-'.concat(side)).getElementsByClassName('card-hide');
+
+    for (card of cards) {
+        if(hide){
+            card.style.display = 'none';
+        }
+        else{
+            card.style.display = 'flex';
+        }
+    }
+}
+
+// Event handling
+$('button').click(function(event) {
+    if(event.target.id === 'btn-author-search') {
+        console.info('Search button clicked');
+
+        clearSearchResults();
+
+        var search_string = $('#input-author-search').val();
+        requestSearchData(search_string);
+    }
+    else {
         var side = getSide(event.target.id);
         console.info(side.concat(' button clicked'));
+        clearSide(side);
         var user_id = $('#input-userid-'.concat(side)).val();
         var year = $('#input-docyear-'.concat(side)).val();
-        requestData(user_id, year, side);
-    });
+        requestAuthorData(user_id, year, side);
+    }
 });
+
+$(".dropzone").on("dragenter", function(event) {
+    event.preventDefault();
+    $(event.currentTarget).addClass("bg-success");
+}).on("dragover", function(event) {
+    event.preventDefault(); 
+    if(!$(event.currentTarget).hasClass("bg-success"))
+        $(event.currentTarget).addClass("bg-success");
+}).on("dragleave", function(event) {
+    event.preventDefault();
+    $(event.currentTarget).removeClass("bg-success");
+}).on("drop", function(event) {
+    event.preventDefault();
+    $(event.currentTarget).removeClass("bg-success");
+    id = event.originalEvent.dataTransfer.getData('id');
+    $(event.currentTarget).find('.input-userid').val(id);
+    clearSearchResults();
+});
+
+$('div').on("dragstart", function(event) {
+    // event.preventDefault();
+    id = $(event.target).find('.user-id').html();
+    event.originalEvent.dataTransfer.setData('id', id);
+})
