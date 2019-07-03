@@ -2,6 +2,7 @@ import urllib.request
 from lxml import etree
 import logging
 from items.items import AuthorItem, DocItem
+from scholarmetrics import hindex
 
 class BeautifulScraper():
 
@@ -21,7 +22,7 @@ class BeautifulScraper():
             html = response.read()
             return html
 
-    def parseAuthorDetails(self, author_id, html):
+    def parseAuthorDetails(self, author_id, html, year):
         logging.info('Parsing main profile for author %s.' % author_id)
 
         dom = etree.HTML(html)
@@ -41,12 +42,7 @@ class BeautifulScraper():
         # Crawl cites and indexes
         tmp_table_data = dom.xpath('//table[@id="gsc_rsb_st"]/tbody/descendant::*[@class="gsc_rsb_std"]/text()')
 
-        author_item.cited = int(tmp_table_data[0])
-        author_item.cited_5y = int(tmp_table_data[1])
-        author_item.h_index = int(tmp_table_data[2])
-        author_item.h_index_5y = int(tmp_table_data[3])
-        author_item.i10_index = int(tmp_table_data[4])
-        author_item.i10_index_5y = int(tmp_table_data[5])
+
 
         # fields of study
         author_item.fields_of_study = dom.xpath('//div[@id="gsc_prf_int"]/descendant::*/text()')
@@ -54,7 +50,22 @@ class BeautifulScraper():
         # crawl cites histogram
         years = dom.xpath('//div[@class="gsc_md_hist_b"]/descendant::span[@class="gsc_g_t"]/text()')
         values = dom.xpath('//div[@class="gsc_md_hist_b"]/descendant::a/span[@class="gsc_g_al"]/text()')
-        author_item.cite_year_values = zip(years, values)
+        tmp_cy = list(zip(years, values))
+        author_item.cite_year_values = list(filter(lambda x: x[0] >= year, tmp_cy))
+
+        logging.debug(author_item.cite_year_values)
+
+        # author_item.cited = int(tmp_table_data[0])
+        tmp_cited = 0
+        for cy in author_item.cite_year_values:
+            tmp_cited += int(cy[1])
+        author_item.cited = tmp_cited
+        author_item.cited_5y = int(tmp_table_data[1])
+        # author_item.h_index = int(tmp_table_data[2])
+        author_item.h_index_5y = int(tmp_table_data[3])
+        author_item.i10_index = int(tmp_table_data[4])
+        author_item.i10_index_5y = int(tmp_table_data[5])
+
 
         return author_item
 
@@ -71,21 +82,30 @@ class BeautifulScraper():
         for doc in docs:
             num_pubs += 1
             doc_item = DocItem()
-            doc_item.title = doc.xpath('//td[@class="gsc_a_t"]/a/text()')[0]
-            doc_item.id = doc.xpath('//td[@class="gsc_a_t"]/a/@href')[0]
-            doc_item.authors = doc.xpath('//td[@class="gsc_a_t"]/div[1]/text()')[0]
-            doc_item.venue = doc.xpath('//td[@class="gsc_a_t"]/div[2]/text()')[0]
-            cite_count = doc.xpath('//td[@class="gsc_a_c"]/a/text()')
+            doc_item.title = doc.xpath('.//td[@class="gsc_a_t"]/a/text()')[0]
+            doc_item.id = doc.xpath('.//td[@class="gsc_a_t"]/a/@href')[0]
+            doc_item.authors = doc.xpath('.//td[@class="gsc_a_t"]/div[1]/text()')[0]
+            venue = doc.xpath('.//td[@class="gsc_a_t"]/div[2]/text()')
+            doc_item.venue = venue[0] if len(venue) > 0 else ''
+            cite_count = doc.xpath('.//td[@class="gsc_a_c"]/a/text()')
             doc_item.cite_count = cite_count[0] if len(cite_count) > 0 else 0
-            doc_item.year = doc.xpath('//td[@class="gsc_a_y"]//text()')[0]
+            year = doc.xpath('.//td[@class="gsc_a_y"]//text()')
+            doc_item.year = year[0] if len(year) > 0 else 0
             publications.append(doc_item)
         logging.info('Scraped {} publications.'.format(num_pubs))
 
         return (num_pubs, publications)
 
-    def scrapePage(self, author_id):
+    def calculateIndices(self, author_item):
+        cited = list(int(pub.cite_count) for pub in author_item.publications)
+        logging.debug(cited)
+        author_item.h_index = hindex(cited)
+
+        return author_item
+
+    def scrapePage(self, author_id, year):
         html = self.downloadProfilePage(author_id)
-        author_item = self.parseAuthorDetails(author_id, html)
+        author_item = self.parseAuthorDetails(author_id, html, year)
 
         author_item.publications = []
         pub_count = BeautifulScraper.PAGESIZE
@@ -99,6 +119,7 @@ class BeautifulScraper():
             author_item.publications.extend(publications)
             start = start + BeautifulScraper.PAGESIZE
 
+        #author_item = self.calculateIndices(author_item)
 
         return author_item
 

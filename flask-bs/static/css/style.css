@@ -1,0 +1,37 @@
+/* .avatar {
+    display: none;
+} */
+
+.card-hide {
+    display: none;
+}
+
+.square {
+    overflow: hidden;
+    position: relative;
+}
+
+.square:after {
+    content: "";
+    display: block;
+    padding-bottom: 100%;
+}
+
+.square-content {
+    position: absolute;
+    min-width: 100%;
+    min-height: 100%;
+    top: -100%;
+    bottom: -100%;
+    left: -100%;
+    right: -100%;
+    margin: auto;
+}
+
+.circle {
+    border-radius: 50%
+}
+
+.input-group-text {
+    min-width: 10rem;
+}
