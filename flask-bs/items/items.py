@@ -34,3 +34,12 @@ class VenueItem():
         self.venue = None
         self.acronym = None
         self.rank = None
+
+class SearchResultItem():
+    def __init__(self, id=None, name=None, organization=None, description=None, image_url=None, cited=None):
+        self.id = id
+        self.name = name
+        self.organization = organization
+        self.description = description
+        self.image_url = image_url
+        self.cited = cited

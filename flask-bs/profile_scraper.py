@@ -4,7 +4,7 @@ import logging
 from items.items import AuthorItem, DocItem
 from scholarmetrics import hindex
 
-class BeautifulScraper():
+class ProfileScraper():
 
     SCRAPED_AUTHORS_PATH = './scraped_data/authors/{}.json'
     SCRAPED_PAGES_PATH = './scraped_data/pages/{}.html'
@@ -16,8 +16,8 @@ class BeautifulScraper():
         self.init_log()
 
     def downloadProfilePage(self, author_id, start=0):
-        url = BeautifulScraper.SEARCH_PATTERN.format(author_id, start, BeautifulScraper.PAGESIZE)
-        logging.debug('Scrape url: {}'.format(url))
+        url = ProfileScraper.SEARCH_PATTERN.format(author_id, start, ProfileScraper.PAGESIZE)
+        logging.info('Scrape url: {}'.format(url))
         with urllib.request.urlopen(url) as response:
             html = response.read()
             return html
@@ -30,7 +30,7 @@ class BeautifulScraper():
         # Create object
         author_item = AuthorItem()
         author_item.id = author_id
-        author_item.image_url = BeautifulScraper.SCHOLAR_BASE_PATH + dom.xpath('//img[@id="gsc_prf_pup-img"]/@src')[0]
+        author_item.image_url = ProfileScraper.SCHOLAR_BASE_PATH + dom.xpath('//img[@id="gsc_prf_pup-img"]/@src')[0]
         author_item.name = dom.xpath('//div[@id="gsc_prf_in"]/text()')[0]
 
         # Crawl whole description
@@ -108,16 +108,16 @@ class BeautifulScraper():
         author_item = self.parseAuthorDetails(author_id, html, year)
 
         author_item.publications = []
-        pub_count = BeautifulScraper.PAGESIZE
+        pub_count = ProfileScraper.PAGESIZE
         start = 0
-        while pub_count == BeautifulScraper.PAGESIZE:
+        while pub_count == ProfileScraper.PAGESIZE:
             if start > 0:
-                logging.info('Start another request with newURL')
+                logging.debug('Start another request with newURL')
                 html = self.downloadProfilePage(author_id, start)
 
             (pub_count, publications) = self.parsePublications(html)
             author_item.publications.extend(publications)
-            start = start + BeautifulScraper.PAGESIZE
+            start = start + ProfileScraper.PAGESIZE
 
         #author_item = self.calculateIndices(author_item)
 
