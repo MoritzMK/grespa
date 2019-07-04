@@ -47,7 +47,7 @@ class RankingMatcher():
         if "journal" in title:
             searchJournals()
         else:
-
+            searchVenues()
         print(rank_dict)
         return rank_dict
 
