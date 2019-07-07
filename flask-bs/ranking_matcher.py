@@ -38,34 +38,21 @@ class RankingMatcher():
     def searchVenuesFuzzy(self, title):
         with open("venues.json", "r") as venues:
             venue_list = json.load(venues)
-            print("TITLE:", title)
-            fuzzy_list = []
+            highest_match = None
             for venue in venue_list:
-                if fuzz.ratio(venue['title'], title) > 70:
-                    fuzzy_list.append(
-                        {'title': venue['title'], 'ratio': fuzz.ratio(venue['title'], title), 'rank': venue['rank']})
-
-                highest_match = None
-                for fuzzy_match in fuzzy_list:
-                    if highest_match == None:
-                        fuzzy_match = highest_match
-                    else:
-                        if fuzzy_match['ratio'] > highest_match['ratio']:
-                            highest_match = fuzzy_match
-
+                if fuzz.ratio(venue['title'], title) > 65:
+                    highest_match = venue
                 if not highest_match == None:
                     print(highest_match)
-                    if highest_match['rank'] in self.rank_dict:
-                        self.rank_dict[highest_match['rank']] += 1
-                    else:
-                        self.rank_dict["other"] += 1
+                    self.addRank(highest_match['rank'])
+                    return highest_match['rank']
 
     def searchVenues(self, title):
         with open("venues.json", "r") as venues:
             venue_list = json.load(venues)
             for venue in venue_list:
                 if title == venue['title']:
-                    addRank(venue['rank'])
+                    self.addRank(venue['rank'])
                     return venue['rank']
 
     def searchJournals(self, title):
@@ -73,7 +60,7 @@ class RankingMatcher():
             journal_list = json.load(journals)
             for journal in journal_list:
                 if title == journal['title']:
-                    addRank(journal['rank'])
+                    self.addRank(journal['rank'])
                     return journal['rank']
 
 # returns rank dict given string title
@@ -100,6 +87,7 @@ class RankingMatcher():
             if not match == None:
                 print("match fuzzy")
             else:
+                # match journal fuzzy vllt
                 print("no match for real")
 
         if not match == None:
@@ -128,6 +116,6 @@ class RankingMatcher():
 
 if __name__ == "__main__":
     matcher = RankingMatcher()
-    print(matcher.matchOne("Proc. ACM Symposium on Document Engineering(DocEng)"))
-    # matcher.matchAllJson()
+    # print(matcher.matchOne("Proc. ACM Symposium on Document Engineering(DocEng)"))
+    matcher.matchAllJson()
     pass
