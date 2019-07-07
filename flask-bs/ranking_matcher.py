@@ -112,6 +112,9 @@ class RankingMatcher():
             self.matchOne(paper)
             i += 1
         print(self.rank_dict)
+        rank_dict = self.rank_dict
+        self.clearDict()
+        return rank_dict
 
 
 if __name__ == "__main__":

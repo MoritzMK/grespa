@@ -35,3 +35,7 @@
 .input-group-text {
     min-width: 10rem;
 }
+
+.spinner-grow {
+    display: none;
+}
