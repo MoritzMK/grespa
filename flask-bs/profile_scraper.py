@@ -2,7 +2,7 @@ import urllib.request
 from lxml import etree
 import logging
 from items.items import AuthorItem, DocItem
-from scholarmetrics import hindex
+from scholarmetrics import hindex, gindex, euclidean
 
 class ProfileScraper():
 
@@ -99,7 +99,9 @@ class ProfileScraper():
     def calculateIndices(self, author_item):
         cited = list(int(pub.cite_count) for pub in author_item.publications)
         logging.debug(cited)
-        author_item.h_index = hindex(cited)
+        author_item.h_index = int(hindex(cited))
+        author_item.g_index = int(gindex(cited))
+        author_item.euclidean = round(float(euclidean(cited)), 2)
 
         return author_item
 
@@ -119,7 +121,7 @@ class ProfileScraper():
             author_item.publications.extend(publications)
             start = start + ProfileScraper.PAGESIZE
 
-        #author_item = self.calculateIndices(author_item)
+        author_item = self.calculateIndices(author_item)
 
         return author_item
 

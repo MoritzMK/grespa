@@ -120,14 +120,22 @@
                   <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Cited</div>
                   <div class="h5 mb-0 font-weight-bold text-gray-800" id="lbl-cited-left"></div>
                 </div>
-                <div class="col">
+                <div class="col" data-toggle="tooltip" data-placement="top" title="An h-index of x means that the author has at least x publications that have been cited at least x times.">
                   <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">h-index</div>
                   <div class="h5 mb-0 font-weight-bold text-gray-800" id="lbl-hindex-left"></div>
+                </div>
+                <div class="col" data-toggle="tooltip" data-placement="top" title="An g-index of x means that the author’s top x publications together accumulated at least x2 citations.">
+                  <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">g-index</div>
+                  <div class="h5 mb-0 font-weight-bold text-gray-800" id="lbl-gindex-left"></div>
+                </div>
+                <div class="col" data-toggle="tooltip" data-placement="top" title="The Euclidean index is simply the Euclidean length of an individual’s citation list.">
+                  <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Euclidean</div>
+                  <div class="h5 mb-0 font-weight-bold text-gray-800" id="lbl-euclidean-left"></div>
                 </div>
               </div>
             </div>
           </div>
-          <div class="card shadow mx-4 card-hide">
+          <!-- <div class="card shadow mx-4 card-hide">
             <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
               <h6 class="m-0 font-weight-bold text-primary">Cited</h6>
             </div>
@@ -136,93 +144,103 @@
                 <canvas id="chart-citecount-left"></canvas>
               </div>
             </div>
-          </div>
-        <div class="card shadow mx-4 card-hide">
-          <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-            <h6 class="m-0 font-weight-bold text-primary">Cites per year</h6>
-          </div>
-          <div class="card-body">
-            <div class="chart-area">
-              <canvas id="chart-cpy-left"></canvas>
+          </div> -->
+          <div class="card shadow mx-4 card-hide">
+            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+              <h6 class="m-0 font-weight-bold text-primary">Cites per year</h6>
+            </div>
+            <div class="card-body">
+              <div class="chart-area">
+                <canvas id="chart-cpy-left"></canvas>
+              </div>
             </div>
           </div>
         </div>
-      </div>
+        <!-- Left side column -->
+
 
         <!-- Right side -->
         <div class="col-xl-6 col-lg-12 p-4 " id="col-right">
-            <div class="card shadow mx-4 dropzone author-card-right">
-              <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                <h6 class="m-0 font-weight-bold text-primary">Author 2</h6>
-              </div>
-              <div class="card-body">
-                <form class="form-inline">
-                  <div class="input-group mb-2 mr-sm-2">
-                    <div class="input-group-prepend">
-                      <span class="input-group-text" id="basic-addon1">UserId</span>
-                    </div>
-                    <input type="text" class="form-control input-userid" placeholder="UserId..." id='input-userid-right'>
-                  </div>
-                  <div class="input-group mb-2 mr-sm-2">
-                    <div class="input-group-prepend">
-                      <span class="input-group-text" id="basic-addon1">Doctorate Year</span>
-                    </div>
-                    <input type="text" class="form-control" placeholder="Year..." id='input-docyear-right'>
-                  </div>
-                  <button class="btn btn-primary mb-2 mr-sm-2" type="button" id="btn-search-right">
-                    <i class="fas fa-search fa-sm"></i>
-                    Search
-                  </button>
-                </form>
-              </div>
+          <div class="card shadow mx-4 dropzone author-card-right">
+            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+              <h6 class="m-0 font-weight-bold text-primary">Author 2</h6>
             </div>
-            <div class="card-hide card shadow mx-4">
-              <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                <h6 class="m-0 font-weight-bold text-primary">Author General</h6>
-              </div>
-              <div class="card-body">
-                <div class="row">
-                  <div class="col-4 col-sm-3">
-                    <div class='square circle'>
-                      <img class='avatar square-content' id='avatar-right'/>
-                    </div>
+            <div class="card-body">
+              <form class="form-inline">
+                <div class="input-group mb-2 mr-sm-2">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text" id="basic-addon1">UserId</span>
                   </div>
-                  <div class="col-8 col-sm-9">
-                    <h5 id="lbl-name-right"></h5>
-                    <label id="lbl-description-right"></label>
-                    <label id="lbl-fos-right"></label>
-                    <label id="lbl-name-right"></label>
+                  <input type="text" class="form-control input-userid" placeholder="UserId..." id='input-userid-right'>
+                </div>
+                <div class="input-group mb-2 mr-sm-2">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text" id="basic-addon1">Doctorate Year</span>
                   </div>
+                  <input type="text" class="form-control" placeholder="Year..." id='input-docyear-right'>
+                </div>
+                <button class="btn btn-primary mb-2 mr-sm-2" type="button" id="btn-search-right">
+                  <i class="fas fa-search fa-sm"></i>
+                  Search
+                </button>
+              </form>
+            </div>
+          </div>
+          <div class="card-hide card shadow mx-4">
+            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+              <h6 class="m-0 font-weight-bold text-primary">Author General</h6>
+            </div>
+            <div class="card-body">
+              <div class="row">
+                <div class="col-4 col-sm-3">
+                  <div class='square circle'>
+                    <img class='avatar square-content' id='avatar-right'/>
+                  </div>
+                </div>
+                <div class="col-8 col-sm-9">
+                  <h5 id="lbl-name-right"></h5>
+                  <label id="lbl-description-right"></label>
+                  <label id="lbl-fos-right"></label>
+                  <label id="lbl-name-right"></label>
                 </div>
               </div>
             </div>
-            <div class="card shadow mx-4 card-hide">
-              <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                <h6 class="m-0 font-weight-bold text-primary">Some values</h6>
-              </div>
-              <div class="card-body">
-                <div class="row">
-                  <div class="col">
-                    <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Cited</div>
-                    <div class="h5 mb-0 font-weight-bold text-gray-800" id="lbl-cited-right"></div>
-                  </div>
-                  <div class="col">
-                    <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">h-index</div>
-                    <div class="h5 mb-0 font-weight-bold text-gray-800" id="lbl-hindex-right"></div>
-                  </div>
+          </div>
+          <div class="card shadow mx-4 card-hide">
+            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+              <h6 class="m-0 font-weight-bold text-primary">Some values</h6>
+            </div>
+            <div class="card-body">
+              <div class="row">
+                <div class="col">
+                  <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Cited</div>
+                  <div class="h5 mb-0 font-weight-bold text-gray-800" id="lbl-cited-right"></div>
+                </div>
+                <div class="col" data-toggle="tooltip" data-placement="top" title="An h-index of x means that the author has at least x publications that have been cited at least x times.">
+                  <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">h-index</div>
+                  <div class="h5 mb-0 font-weight-bold text-gray-800" id="lbl-hindex-right"></div>
+                </div>
+                <div class="col" data-toggle="tooltip" data-placement="top" title="An g-index of x means that the author’s top x publications together accumulated at least x2 citations.">
+                  <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">g-index</div>
+                  <div class="h5 mb-0 font-weight-bold text-gray-800" id="lbl-gindex-right"></div>
+                </div>
+                <div class="col" data-toggle="tooltip" data-placement="top" title="The Euclidean index is simply the Euclidean length of an individual’s citation list.">
+                  <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Euclidean</div>
+                  <div class="h5 mb-0 font-weight-bold text-gray-800" id="lbl-euclidean-right"></div>
                 </div>
               </div>
             </div>
-            <div class="card shadow mx-4 card-hide">
-              <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                <h6 class="m-0 font-weight-bold text-primary">Cited</h6>
-              </div>
-              <div class="card-body">
-                <div class="chart-area">
-                  <canvas id="chart-citecount-right"></canvas>
-                </div>
+          </div>
+          <!-- <div class="card shadow mx-4 card-hide">
+            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+              <h6 class="m-0 font-weight-bold text-primary">Cited</h6>
+            </div>
+            <div class="card-body">
+              <div class="chart-area">
+                <canvas id="chart-citecount-right"></canvas>
               </div>
             </div>
+          </div> -->
           <div class="card shadow mx-4 card-hide">
             <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
               <h6 class="m-0 font-weight-bold text-primary">Cites per year</h6>
@@ -234,8 +252,31 @@
             </div>
           </div>
         </div>
+        <!-- Right row column -->
+
       </div>
+      <!-- Main row -->
+
+      <!-- chart row -->
+      <div class="row">
+          <div class="col p-4">
+            <div class="card shadow mx-4">
+              <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                <h6 class="m-0 font-weight-bold text-primary">Cited</h6>
+              </div>
+              <div class="card-body">
+                <div class="chart-area">
+                  <canvas id="chart-citecount"></canvas>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- chart row -->
+
     </div>
+    <!-- Container-Fluid -->
+
 
     <script type = "text/template" id="search-result-template">
       <div class="list-group-item list-group-item-action flex-column align-items-start draggable" draggable="true">

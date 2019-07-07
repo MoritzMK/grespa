@@ -1,4 +1,6 @@
-var charts = {}
+var charts = {};
+var author_data = {};
+var theme = {};
 
 // Requests
 function requestAuthorData(author_id, doc_year, side) {
@@ -24,9 +26,9 @@ function processData(response, side) {
     console.info(response);
 
     // clearSide(side);
-
+    saveData(response.data, side);
     createCvyChart(response.data, side);
-    createCiteCountChart(response.data, side)
+    setCitedChartData();
     setImage(response.data.image_url, side);
     setGeneral(response.data, side);
 
@@ -52,11 +54,13 @@ function clearSearchResults() {
 }
 
 function clearSide(side) {
-    if(side in charts) {
-        for ([key,chart] of Object.entries(charts[side])) {
+    for ([key,chart] of Object.entries(charts)) {
+        if(getSide(key) == side){
             chart.destroy();
         }
     }
+
+    author_data[side] = {};
 
     setCardsDisplay(side, true);
 }
@@ -108,21 +112,21 @@ function createCvyChart(data, side) {
         }
     });
 
-    saveChart(barChart, 'cvy', side);
+    saveChart(barChart, 'cvy-'.concat(side));
 }
 
-function createCiteCountChart(data, side) {
-    var ctx = document.getElementById('chart-citecount-'.concat(side)).getContext('2d');
+function createCiteCountChart(labels) {
+    var ctx = document.getElementById('chart-citecount').getContext('2d');
     var barChart = new Chart(ctx, {
-        type: 'horizontalBar',
+        type: 'bar',
         data: {
-            labels: ['Cited'],
-            datasets: [{
-                data: [data.cited],
-                backgroundColor: 'rgba(255, 99, 132, 0.2)',
-                borderColor: 'rgba(255, 99, 132, 1)',
-                borderWidth: 1
-            }]
+            labels: labels,
+            // datasets: [{
+            //     data: values,
+            //     backgroundColor: Object.values(theme),
+            //     borderColor: Object.values(theme),
+            //     borderWidth: 1
+            // }]
         },
         options: {
             scales: {
@@ -135,39 +139,51 @@ function createCiteCountChart(data, side) {
                         min:  0,
                     }
                 }],
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true,
+                        min:  0,
+                    }
+                }],
             },
             // aspectRatio: 1,
             responsive: true,
-            legend: {
-                display: false,
-            },
+            // legend: {
+            //     display: false,
+            // },
         }
     });
 
-    saveChart(barChart, 'citecount', side);
+    saveChart(barChart, 'citecount');
 
     //equalizeChartAxis();
 }
 
-function equalizeChartAxis(){
-    var max = 0;
-    for ([key, side] of Object.entries(charts)) {
-        chart = side['citecount'];
-        if (chart === undefined){
-            continue;
-        }
-        max = Math.max([max, chart.options.scales.xAxes[0].ticks.max]);
+function setCitedChartData() {
+    var datasets = [];
+    var colors = Object.values(theme);
+    for ([key,author] of Object.entries(author_data)) {
+        dataset = {};
+        dataset.label = author.name;
+        dataset.data = [];
+        dataset.data.push(author.cited);
+        color = colors.shift();
+        dataset.backgroundColor = color;
+        dataset.borderColor = color;
+        datasets.push(dataset);
     }
-    
-    for ([key, side] of Object.entries(charts)) {
-        chart = side['citecount'];
-        if (chart === undefined){
-            continue;
-        }
-        chart.options.scales.xAxes[0].ticks.max = max;
-        chart.update();
-        console.info('Updated chart.')
+
+    if(!('citecount' in charts)){
+        labels = ['cited'];
+        createCiteCountChart(labels);
     }
+
+    var chart = charts['citecount'];
+    chart.data.labels = labels;
+    chart.data.datasets = datasets;
+
+    chart.update();
+    console.info('Updated chart.')
 }
 
 function setImage(link, side) {
@@ -184,10 +200,11 @@ function setGeneral(data, side) {
 
 function setMetrics(data, side) {
     document.getElementById('lbl-cited-'.concat(side)).innerHTML = data.cited;
-    document.getElementById('lbl-hindex-'.concat(side)).innerHTML = data.hindex;
+    document.getElementById('lbl-hindex-'.concat(side)).innerHTML = data.h_index;
+    document.getElementById('lbl-gindex-'.concat(side)).innerHTML = data.g_index;
+    document.getElementById('lbl-euclidean-'.concat(side)).innerHTML = Number.parseFloat(data.euclidean).toFixed(2);
 
 }
-
 
 // Some other stuff
 function getSide(id) {
@@ -196,17 +213,17 @@ function getSide(id) {
     return side;
 }
 
-function saveChart(chart, name, side) {
-    if (!(side in charts)) {
-        charts[side] = {};
-    }
+function saveChart(chart, name) {
+    charts[name] = chart;
+}
 
-    charts[side][name] = chart;
+function saveData(data, side) {
+    author_data[side] = data
 }
 
 function setCardsDisplay(side, hide) {
     var cards = document.getElementById('col-'.concat(side)).getElementsByClassName('card-hide');
-
+    
     for (card of cards) {
         if(hide){
             card.style.display = 'none';
@@ -215,6 +232,20 @@ function setCardsDisplay(side, hide) {
             card.style.display = 'flex';
         }
     }
+}
+
+function getCurrentColors() {
+    var style = getComputedStyle(document.body);
+    theme = {};
+
+    theme.primary = style.getPropertyValue('--primary');
+    // theme.secondary = style.getPropertyValue('--secondary');
+    theme.success = style.getPropertyValue('--success');
+    theme.info = style.getPropertyValue('--info');
+    theme.warning = style.getPropertyValue('--warning');
+    theme.danger = style.getPropertyValue('--danger');
+    theme.light = style.getPropertyValue('--light');
+    theme.dark = style.getPropertyValue('--dark');
 }
 
 // Event handling
@@ -260,3 +291,5 @@ $('div').on("dragstart", function(event) {
     id = $(event.target).find('.user-id').html();
     event.originalEvent.dataTransfer.setData('id', id);
 })
+
+getCurrentColors();
