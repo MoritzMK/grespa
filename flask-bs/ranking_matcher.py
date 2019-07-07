@@ -47,6 +47,18 @@ class RankingMatcher():
                     self.addRank(highest_match['rank'])
                     return highest_match['rank']
 
+    def searchJournalsFuzzy(self, title):
+        with open("journals.json", "r") as journals:
+            journal_list = json.load(journals)
+            highest_match = None
+            for journal in journal_list:
+                if fuzz.ratio(journal['title'], title) > 65:
+                    highest_match = journal
+                if not highest_match == None:
+                    print(highest_match)
+                    self.addRank(highest_match['rank'])
+                    return highest_match['rank']
+
     def searchVenues(self, title):
         with open("venues.json", "r") as venues:
             venue_list = json.load(venues)
@@ -63,7 +75,7 @@ class RankingMatcher():
                     self.addRank(journal['rank'])
                     return journal['rank']
 
-# returns rank dict given string title
+# returns rank dict given title of venue
     def matchOne(self, title):
         match = None
         acronym = self.hasAcronym(title)
@@ -85,10 +97,14 @@ class RankingMatcher():
             print("no match => fuzzy")
             match = self.searchVenuesFuzzy(title)
             if not match == None:
-                print("match fuzzy")
+                print("match fuzzy venue")
             else:
                 # match journal fuzzy vllt
-                print("no match for real")
+                match = self.searchJournalsFuzzy(title)
+                if not match == None:
+                    print("match fuzzy journal")
+                else:
+                    print("no match for real")
 
         if not match == None:
             return match
