@@ -34,6 +34,7 @@ function processData(response, side) {
 
     setMetrics(response.data, side);
 
+    setSpinnerVisibility(side, true);
     setCardsDisplay(side, false);
 }
 
@@ -174,7 +175,7 @@ function setCitedChartData() {
     }
 
     if(!('citecount' in charts)){
-        labels = ['cited'];
+        var labels = ['cited'];
         createCiteCountChart(labels);
     }
 
@@ -234,6 +235,15 @@ function setCardsDisplay(side, hide) {
     }
 }
 
+function setSpinnerVisibility(side, hide) {
+    var div = $('#spinner-'.concat(side))[0];
+    if (hide) {
+      div.style.display = "none";
+    } else {
+      div.style.display = "block";
+    }
+  }
+
 function getCurrentColors() {
     var style = getComputedStyle(document.body);
     theme = {};
@@ -262,6 +272,7 @@ $('button').click(function(event) {
         var side = getSide(event.target.id);
         console.info(side.concat(' button clicked'));
         clearSide(side);
+        setSpinnerVisibility(side, false);
         var user_id = $('#input-userid-'.concat(side)).val();
         var year = $('#input-docyear-'.concat(side)).val();
         requestAuthorData(user_id, year, side);

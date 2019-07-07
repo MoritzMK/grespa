@@ -1,6 +1,6 @@
 class AuthorItem():
 
-    def __init__(self, id=None, fields_of_study=None, name=None, description=None, cited=None, cited_5y=None, h_index=None, h_index_5y=None, i10_index=None, i10_index_5y=None, g_index=None, euclidean=None, cite_year_values=None, image_url=None, publications=None):
+    def __init__(self, id=None, fields_of_study=None, name=None, description=None, cited=None, cited_5y=None, h_index=None, h_index_5y=None, i10_index=None, i10_index_5y=None, g_index=None, euclidean=None, cite_year_values=None, image_url=None, publications=None, venue_ranking=None):
         self.id = id
         self.fields_of_study = fields_of_study
         self.name = name
@@ -16,6 +16,7 @@ class AuthorItem():
         self.cite_year_values = cite_year_values
         self.image_url = image_url
         self.publications = publications
+        self.venue_ranking = venue_ranking
 
 
 class DocItem():

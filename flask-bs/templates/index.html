@@ -155,6 +155,11 @@
               </div>
             </div>
           </div>
+          <div class="d-flex justify-content-center pt-5">
+            <div class="spinner-grow" style="width: 3rem; height: 3rem;" role="status" id="spinner-left"  style="display: none">
+              <span class="sr-only">Loading...</span>
+            </div>
+          </div>
         </div>
         <!-- Left side column -->
 
@@ -251,6 +256,11 @@
               </div>
             </div>
           </div>
+          <div class="d-flex justify-content-center pt-5">
+            <div class="spinner-grow" style="width: 3rem; height: 3rem;" role="status" id="spinner-right" style="display: none">
+              <span class="sr-only">Loading...</span>
+            </div>
+          </div>
         </div>
         <!-- Right row column -->
 
@@ -265,9 +275,19 @@
                 <h6 class="m-0 font-weight-bold text-primary">Cited</h6>
               </div>
               <div class="card-body">
-                <div class="chart-area">
-                  <canvas id="chart-citecount"></canvas>
+                <div class="row">
+                  <div class="col">
+                    <div class="chart-area">
+                      <canvas id="chart-citecount"></canvas>
+                    </div>
+                  </div>
+                  <div class="col">
+                    <div class="chart-area">
+                      <canvas id="chart-ranking"></canvas>
+                    </div>
+                  </div>
                 </div>
+
               </div>
             </div>
           </div>

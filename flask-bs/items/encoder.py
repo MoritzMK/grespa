@@ -16,10 +16,14 @@ class AuthorEncoder():
                 #     pub.venue = pub.venue.__dict__
                 # Append the pub to the list
                 item.publications.append(pub.__dict__)
-
+            
         # If there are, and there will be some, citeYearValues, serialize them
         if(item.cite_year_values):
             item.cite_year_values = dict(item.cite_year_values)
+
+        # If there are rankings, serialize them
+        if(item.venue_ranking):
+            item.venue_ranking = dict(item.venue_ranking)
 
         # At the end, serialize the authorItem itself and return it
         return item.__dict__

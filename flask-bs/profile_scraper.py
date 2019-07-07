@@ -3,6 +3,7 @@ from lxml import etree
 import logging
 from items.items import AuthorItem, DocItem
 from scholarmetrics import hindex, gindex, euclidean
+from ranking_matcher import RankingMatcher
 
 class ProfileScraper():
 
@@ -14,6 +15,7 @@ class ProfileScraper():
 
     def __init__(self):
         self.init_log()
+        self.ranking_matcher = RankingMatcher()
 
     def downloadProfilePage(self, author_id, start=0):
         url = ProfileScraper.SEARCH_PATTERN.format(author_id, start, ProfileScraper.PAGESIZE)
@@ -53,7 +55,7 @@ class ProfileScraper():
         tmp_cy = list(zip(years, values))
         author_item.cite_year_values = list(filter(lambda x: x[0] >= year, tmp_cy))
 
-        logging.debug(author_item.cite_year_values)
+        #logging.debug(author_item.cite_year_values)
 
         # author_item.cited = int(tmp_table_data[0])
         tmp_cited = 0
@@ -98,11 +100,19 @@ class ProfileScraper():
 
     def calculateIndices(self, author_item):
         cited = list(int(pub.cite_count) for pub in author_item.publications)
-        logging.debug(cited)
+        #logging.debug(cited)
         author_item.h_index = int(hindex(cited))
         author_item.g_index = int(gindex(cited))
         author_item.euclidean = round(float(euclidean(cited)), 2)
 
+        return author_item
+
+    def getVenueRankings(self, author_item):
+        venues = list(pub.venue for pub in author_item.publications)
+        logging.debug(venues)
+        rankings = self.ranking_matcher.matchAllString(venues)
+        author_item.venue_ranking = rankings
+        logging.debug(author_item.venue_ranking)
         return author_item
 
     def scrapePage(self, author_id, year):
@@ -122,6 +132,7 @@ class ProfileScraper():
             start = start + ProfileScraper.PAGESIZE
 
         author_item = self.calculateIndices(author_item)
+        author_item = self.getVenueRankings(author_item)
 
         return author_item
 
