@@ -242,8 +242,8 @@ function setCitedChartData() {
 function setRankingChartData() {
     var datasets = [];
     var colors = Object.values(theme);
-    for (author of Object.values(author_data)) {
-        if(!author){
+    for ([key,author] of Object.entries(author_data)) {
+        if(!key){
             continue;
         }
         dataset = {};
