@@ -105,7 +105,7 @@ class RankingMatcher():
                     print("match fuzzy journal")
                 else:
                     print("no match for real")
-                    self.rank_dict['other'] = 1
+                    self.rank_dict['other'] += 1
 
         if not match == None:
             return match
