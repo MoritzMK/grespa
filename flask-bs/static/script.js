@@ -8,7 +8,9 @@ function requestAuthorData(author_id, doc_year, side) {
         type: 'GET',
         url: '/author/'.concat(author_id),
         data: {year: doc_year},
-        success: (response) => {processData(response, side)} 
+        success: (response) => {processData(response, side)} ,
+        error: (xhr, ajaxOptions, thrownError) => {handleError(xhr, ajaxOptions, thrownError, side)},
+        
     });
 }
 
@@ -48,6 +50,10 @@ function processSearchResult(response) {
     for (author of response.data) {
         addSearchResult(author);
     }
+}
+
+function handleError(xhr, ajaxOptions, thrownError, side) {
+    setSpinnerVisibility(side, true);
 }
 
 // Clearing
@@ -236,7 +242,10 @@ function setCitedChartData() {
 function setRankingChartData() {
     var datasets = [];
     var colors = Object.values(theme);
-    for ([key,author] of Object.entries(author_data)) {
+    for (author of Object.values(author_data)) {
+        if(!author){
+            continue;
+        }
         dataset = {};
         dataset.label = author.name;
         dataset.data = [];
@@ -276,6 +285,7 @@ function setGeneral(data, side) {
 }
 
 function setMetrics(data, side) {
+    document.getElementById('lbl-pubcount-'.concat(side)).innerHTML = data.publications.length;
     document.getElementById('lbl-cited-'.concat(side)).innerHTML = data.cited;
     document.getElementById('lbl-hindex-'.concat(side)).innerHTML = data.h_index;
     document.getElementById('lbl-gindex-'.concat(side)).innerHTML = data.g_index;
@@ -295,7 +305,9 @@ function saveChart(chart, name) {
 }
 
 function saveData(data, side) {
-    author_data[side] = data
+    if(side){
+        author_data[side] = data;
+    }
 }
 
 function setCardsDisplay(side, hide) {
