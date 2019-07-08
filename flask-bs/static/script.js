@@ -243,7 +243,7 @@ function setRankingChartData() {
     var datasets = [];
     var colors = Object.values(theme);
     for ([key,author] of Object.entries(author_data)) {
-        if(!key){
+        if(!author || !author.venue_ranking){
             continue;
         }
         dataset = {};
@@ -348,6 +348,9 @@ function getCurrentColors() {
 
 // Event handling
 $('button').click(function(event) {
+    if(!event.target.id){
+        return;
+    }
     if(event.target.id === 'btn-author-search') {
         console.info('Search button clicked');
 
