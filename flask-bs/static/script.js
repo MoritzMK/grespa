@@ -28,6 +28,7 @@ function processData(response, side) {
     // clearSide(side);
     saveData(response.data, side);
     createCvyChart(response.data, side);
+    setRankingChartData();
     setCitedChartData();
     setImage(response.data.image_url, side);
     setGeneral(response.data, side);
@@ -119,7 +120,7 @@ function createCvyChart(data, side) {
 function createCiteCountChart(labels) {
     var ctx = document.getElementById('chart-citecount').getContext('2d');
     var barChart = new Chart(ctx, {
-        type: 'bar',
+        type: 'horizontalBar',
         data: {
             labels: labels,
             // datasets: [{
@@ -160,6 +161,50 @@ function createCiteCountChart(labels) {
     //equalizeChartAxis();
 }
 
+function createVenueRankingChart(labels) {
+    var ctx = document.getElementById('chart-ranking').getContext('2d');
+    var barChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: labels,
+            // datasets: [{
+            //     data: values,
+            //     backgroundColor: Object.values(theme),
+            //     borderColor: Object.values(theme),
+            //     borderWidth: 1
+            // }]
+        },
+        options: {
+            scales: {
+                xAxes: [{
+                    gridLines: {
+                        color: "rgba(0, 0, 0, 0)",
+                    },
+                    ticks: {
+                        beginAtZero: true,
+                        min:  0,
+                    }
+                }],
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true,
+                        min:  0,
+                    }
+                }],
+            },
+            // aspectRatio: 1,
+            responsive: true,
+            // legend: {
+            //     display: false,
+            // },
+        }
+    });
+
+    saveChart(barChart, 'ranking');
+
+    //equalizeChartAxis();
+}
+
 function setCitedChartData() {
     var datasets = [];
     var colors = Object.values(theme);
@@ -174,8 +219,9 @@ function setCitedChartData() {
         datasets.push(dataset);
     }
 
+    var labels = ['cited'];
+
     if(!('citecount' in charts)){
-        var labels = ['cited'];
         createCiteCountChart(labels);
     }
 
@@ -184,7 +230,37 @@ function setCitedChartData() {
     chart.data.datasets = datasets;
 
     chart.update();
-    console.info('Updated chart.')
+    console.info('Updated citecount chart.')
+}
+
+function setRankingChartData() {
+    var datasets = [];
+    var colors = Object.values(theme);
+    for ([key,author] of Object.entries(author_data)) {
+        dataset = {};
+        dataset.label = author.name;
+        dataset.data = [];
+        for (venue_ranking of Object.values(author.venue_ranking)){
+            dataset.data.push(venue_ranking);
+        }
+        color = colors.shift();
+        dataset.backgroundColor = color;
+        dataset.borderColor = color;
+        datasets.push(dataset);
+    }
+
+    var labels = Object.keys(Object.values(author_data)[0].venue_ranking);
+
+    if(!('ranking' in charts)){
+        createVenueRankingChart(labels);
+    }
+
+    var chart = charts['ranking'];
+    chart.data.labels = labels;
+    chart.data.datasets = datasets;
+
+    chart.update();
+    console.info('Updated ranking chart.')
 }
 
 function setImage(link, side) {
