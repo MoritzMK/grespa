@@ -16,7 +16,7 @@ class RankingMatcher():
         if rank in self.rank_dict:
             self.rank_dict[rank] += 1
         else:
-            self.rank_dict['other'] = 1
+            self.rank_dict['other'] += 1
 
     def hasAcronym(self, title):
         x = re.search("\(([^)]+)\)", title)
@@ -78,20 +78,20 @@ class RankingMatcher():
 # returns rank dict given title of venue
     def matchOne(self, title):
         match = None
-        acronym = self.hasAcronym(title)
-        if acronym != None:
-            match = self.searchAcronym(acronym)
+        # acronym = self.hasAcronym(title)
+        # if acronym != None:
+        #     match = self.searchAcronym(acronym)
+        #     if not match == None:
+        #         print("match acro")
+        # else:
+        if "journal" in title:
+            match = self.searchJournals(title)
             if not match == None:
-                print("match acro")
+                print("match journal")
         else:
-            if "journal" in title:
-                match = self.searchJournals(title)
-                if not match == None:
-                    print("match journal")
-            else:
-                match = self.searchVenues(title)
-                if not match == None:
-                    print("match venue")
+            match = self.searchVenues(title)
+            if not match == None:
+                print("match venue")
         # if no match => fuzzy match
         if match == None:
             print("no match => fuzzy")
