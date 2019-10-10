@@ -1,8 +1,0 @@
-name: grespa-scraper
-dependencies:
-  - python=3.7
-  - requests
-  - pip
-  - pip:
-    - scrapy
-    - scrapy_fake_useragent
