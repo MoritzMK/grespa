@@ -1,0 +1,9 @@
+name: authorcomparer
+dependencies:
+  - flask
+  - lxml
+  - numpy
+  - python-levenshtein
+  - pip:
+    - scholarmetrics
+    - fuzzywuzzy
